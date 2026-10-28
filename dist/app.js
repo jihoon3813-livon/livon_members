@@ -24,7 +24,7 @@ const data = {
     bannerAlt: '02 치료지원 케어 안내 배너 - 치료부터 회복까지 함께하는 리본케어',
     bannerFallback: 'assets/treatment-care.png',
     lead: '치료와 회복에 필요한 실질적인 도움을 선택하세요.',
-    tag: '통합 한도 차감',
+    tag: '통합 한도에서 차감',
     items: [
       ['heart', '간병인 지원', '입원 중 곁에서 필요한 일상 돌봄을 지원합니다.', '24시간 · 1회 차감', 'care'],
       ['cross', '간호사 동행', '병원 진료에 도움이 필요한 순간, 함께합니다.', '이용 기준 보기 ↗', 'nurse'],
@@ -39,7 +39,7 @@ const data = {
     bannerAlt: '03 스마트 홈케어 안내 배너 - 집에서 이어지는 따뜻한 돌봄',
     bannerFallback: 'assets/smart-home-care.png',
     lead: '병원 밖, 집에서도 이어지는 돌봄을 5년간 무상으로 연결합니다.',
-    tag: '5년 무상 (한도 5회 차감)',
+    tag: '통합 한도에서 차감',
     items: [
       ['phone', '케어비전 태블릿', '스마트 홈케어 5년 무상 이용 중심 기기입니다.', '패키지 구성 보기 ↗', 'smart'],
       ['house', '홈 센서', '생활 환경에 맞춰 구성하는 5년 무상 센서 패키지입니다.', '패키지 구성 보기 ↗', 'smart'],
@@ -67,6 +67,7 @@ const data = {
 function renderTab(key) {
   let x = data[key];
   if (!x) return;
+  const isDeduct = key === 'treatment' || key === 'smart';
   $('#care-panel').innerHTML = `
     <div class="care-panel-banner" data-preview-img="${x.bannerImg}" data-preview-title="${x.bannerTitle}" title="클릭하면 큰 화면으로 볼 수 있습니다">
       <img src="${x.bannerImg}" alt="${x.bannerAlt}" loading="lazy" onerror="this.onerror=null;this.src='${x.bannerFallback}';">
@@ -74,7 +75,10 @@ function renderTab(key) {
     </div>
     <div class="care-panel-head">
       <p>${x.lead}</p>
-      <span class="badge">${x.tag}</span>
+      <div class="category-badge-group">
+        <span class="badge ${isDeduct ? 'badge-red' : ''}">${x.tag}</span>
+        ${key === 'smart' ? '<span class="deduct-chip">5회 차감</span>' : ''}
+      </div>
     </div>
     <div class="service-grid">
       ${x.items.map((a, i) => `
@@ -178,12 +182,33 @@ const details = {
 const detailDialog = $('#detail-dialog');
 let prevFocus;
 
-function openDialog(title, paras) {
+function openDialog(title, paras, detailKey) {
   prevFocus = document.activeElement;
   $('#dialog-title').textContent = title;
+  const isDeduct = ['care', 'home', 'organize', 'smart'].includes(detailKey);
+  const tagEl = $('#dialog-tag');
+  if (tagEl) {
+    if (isDeduct) {
+      tagEl.textContent = '통합 한도에서 차감';
+      tagEl.className = 'eyebrow dialog-tag-deduct';
+    } else {
+      tagEl.textContent = 'LIVON CARE GUIDE';
+      tagEl.className = 'eyebrow';
+    }
+  }
+  if (isDeduct) {
+    detailDialog.classList.add('dialog-deduct');
+  } else {
+    detailDialog.classList.remove('dialog-deduct');
+  }
   $('#dialog-body').replaceChildren(...paras.map(t => {
     let p = document.createElement('p');
-    p.textContent = t;
+    if (isDeduct) {
+      // 차감 관련 회차 및 문구를 진한 레드 하이라이트로 강조
+      p.innerHTML = t.replace(/(통합 한도에서\s*5회를\s*차감|통합 한도\s*[0-9.]*회(?:를)?\s*차감|[0-9.]*회\s*차감)/g, '<strong class="modal-deduct-highlight">$1</strong>');
+    } else {
+      p.textContent = t;
+    }
     p.style.whiteSpace = 'pre-line';
     return p;
   }));
@@ -198,8 +223,9 @@ function closeDialog() {
 document.addEventListener('click', e => {
   let b = e.target.closest('[data-detail]');
   if (b) {
-    let d = details[b.dataset.detail];
-    if (d) openDialog(d[0], d.slice(1));
+    let k = b.dataset.detail;
+    let d = details[k];
+    if (d) openDialog(d[0], d.slice(1), k);
   }
 });
 
@@ -807,3 +833,34 @@ document.addEventListener('click', e => {
     toggleBtn.querySelector('span').textContent = '상세 혜택 접기';
   }
 });
+
+// 실제 후기 카테고리 필터 탭 인터랙션
+document.addEventListener('click', e => {
+  const tabBtn = e.target.closest('.review-tab-btn');
+  if (!tabBtn) return;
+  
+  const nav = tabBtn.closest('.reviews-tab-nav');
+  if (!nav) return;
+
+  const category = tabBtn.getAttribute('data-review-category');
+  if (!category) return;
+
+  // 탭 active 상태 토글
+  nav.querySelectorAll('.review-tab-btn').forEach(btn => {
+    const isActive = btn === tabBtn;
+    btn.classList.toggle('active', isActive);
+    btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
+  });
+
+  // 후기 카드 필터링
+  const cards = document.querySelectorAll('#reviews-grid .review-card');
+  cards.forEach(card => {
+    const cardCat = card.getAttribute('data-category') || '';
+    if (category === 'all' || cardCat.split(' ').includes(category)) {
+      card.classList.remove('hidden');
+    } else {
+      card.classList.add('hidden');
+    }
+  });
+});
+
