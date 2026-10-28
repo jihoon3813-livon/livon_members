@@ -23,6 +23,10 @@
     <symbol id="i-phone" viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M10 18h4"/></symbol>
     <symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21" stroke="currentColor" stroke-width="2"/></symbol>
     <symbol id="i-zoom" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="m21 21-4.35-4.35M11 8v6M8 11h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-step-consult" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5Z"/><circle cx="8" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="16" cy="12" r="1" fill="currentColor"/></symbol>
+    <symbol id="i-step-register" viewBox="0 0 24 24"><path d="M15 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8" cy="7" r="4"/><polyline points="15 11 17.5 13.5 22.5 8.5"/></symbol>
+    <symbol id="i-step-calendar" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="3"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><circle cx="12" cy="15.5" r="2.5"/><polyline points="12 14.3 12 15.5 13.2 15.5"/></symbol>
+    <symbol id="i-step-care" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1Z"/><path d="M12 12.2a2 2 0 0 0-2.8 0 2 2 0 0 0 0 2.8l2.8 2.8 2.8-2.8a2 2 0 0 0 0-2.8 2 2 0 0 0-2.8 0Z"/></symbol>
     <clipPath id="house-clip" clipPathUnits="objectBoundingBox">
       <path d="M 0.54 0.015 L 0.975 0.205 Q 1 0.22 1 0.25 L 1 0.97 Q 1 1 0.97 1 L 0.03 1 Q 0 1 0 0.97 L 0 0.25 Q 0 0.22 0.025 0.205 L 0.46 0.015 Q 0.5 0 0.54 0.015 Z" />
     </clipPath>
@@ -596,7 +600,7 @@
   </section>
 
   <!-- 이용 과정 안내 -->
-  <section class="section process-section">
+  <section class="section process-section" id="process">
     <div class="container">
       <div class="section-head">
         <div>
@@ -606,10 +610,69 @@
         <p>상담부터 서비스 이용까지<br>확인하고 선택할 수 있도록.</p>
       </div>
       <div class="process-grid">
-        <article><span>01</span><h3>상품 상담</h3><p>원하는 돌봄과<br>상품 구성을 확인해요.</p></article>
-        <article><span>02</span><h3>가입·대상자 등록</h3><p>이용조건을 확인하고<br>서비스 대상자를 등록해요.</p></article>
-        <article><span>03</span><h3>서비스 신청</h3><p>희망 일정과 지역,<br>필요한 서비스를 알려주세요.</p></article>
-        <article><span>04</span><h3>안내 후 이용</h3><p>배정 여부와 차감 횟수,<br>추가비용 확인 후 이용해요.</p></article>
+        <article class="process-card">
+          <div class="process-card-top">
+            <span class="process-step-badge">STEP 01</span>
+            <div class="process-icon-box mint" aria-hidden="true">
+              <svg><use href="#i-step-consult"/></svg>
+            </div>
+          </div>
+          <div class="process-card-body">
+            <h3>상품 상담</h3>
+            <p>원하는 돌봄과<br>상품 구성을 확인해요.</p>
+          </div>
+          <div class="process-card-footer">
+            <span class="process-tag">맞춤 상담</span>
+          </div>
+        </article>
+
+        <article class="process-card">
+          <div class="process-card-top">
+            <span class="process-step-badge">STEP 02</span>
+            <div class="process-icon-box rose" aria-hidden="true">
+              <svg><use href="#i-step-register"/></svg>
+            </div>
+          </div>
+          <div class="process-card-body">
+            <h3>가입·대상자 등록</h3>
+            <p>이용조건을 확인하고<br>서비스 대상자를 등록해요.</p>
+          </div>
+          <div class="process-card-footer">
+            <span class="process-tag">대상자 등록</span>
+          </div>
+        </article>
+
+        <article class="process-card">
+          <div class="process-card-top">
+            <span class="process-step-badge">STEP 03</span>
+            <div class="process-icon-box mint" aria-hidden="true">
+              <svg><use href="#i-step-calendar"/></svg>
+            </div>
+          </div>
+          <div class="process-card-body">
+            <h3>서비스 신청</h3>
+            <p>희망 일정과 지역,<br>필요한 서비스를 알려주세요.</p>
+          </div>
+          <div class="process-card-footer">
+            <span class="process-tag">일정·지역 조율</span>
+          </div>
+        </article>
+
+        <article class="process-card">
+          <div class="process-card-top">
+            <span class="process-step-badge">STEP 04</span>
+            <div class="process-icon-box rose" aria-hidden="true">
+              <svg><use href="#i-step-care"/></svg>
+            </div>
+          </div>
+          <div class="process-card-body">
+            <h3>안내 후 이용</h3>
+            <p>배정 여부와 차감 횟수,<br>추가비용 확인 후 이용해요.</p>
+          </div>
+          <div class="process-card-footer">
+            <span class="process-tag">안심 케어</span>
+          </div>
+        </article>
       </div>
     </div>
   </section>
@@ -751,6 +814,71 @@
   <a href="#plans">상품 비교</a>
   <a href="#consult" class="highlight">상담 신청 <span>↗</span></a>
 </div>
+
+<!-- 상담 신청 팝업 모달 다이얼로그 -->
+<dialog id="consult-dialog" class="consult-dialog">
+  <button class="dialog-close consult-dialog-close" type="button" aria-label="닫기">×</button>
+  <div class="consult-dialog-header">
+    <span class="eyebrow">LIVON CARE CONSULTATION</span>
+    <h2 id="consult-dialog-title">멤버십 상담 신청</h2>
+    <p class="consult-dialog-desc">궁금한 상품과 돌봄 서비스를 남겨주시면, 전문 상담사가 맞춤 구성과 상세 혜택을 친절하게 안내해 드립니다.</p>
+  </div>
+
+  <form id="modal-consult-form" novalidate>
+    <div class="form-grid">
+      <label>
+        이름 <span>*</span>
+        <input name="name" id="modal-input-name" placeholder="성함을 입력해 주세요" required autocomplete="name" maxlength="30">
+        <span class="field-error" id="modal-name-error"></span>
+      </label>
+      <label>
+        연락처 <span>*</span>
+        <input name="phone" id="modal-input-phone" type="tel" placeholder="010-0000-0000" required autocomplete="tel" maxlength="13">
+        <span class="field-error" id="modal-phone-error"></span>
+      </label>
+    </div>
+
+    <label>
+      관심 상품
+      <select name="plan" id="modal-form-plan">
+        <option value="undecided">상담 후 결정하고 싶어요</option>
+        <option value="160">라이프케어 160 · 7회 (160만원)</option>
+        <option value="320">라이프케어 320 · 15회 (320만원)</option>
+        <option value="smart">스마트 홈케어가 궁금해요</option>
+      </select>
+    </label>
+
+    <fieldset>
+      <legend>관심 서비스 <small>복수 선택 가능</small></legend>
+      <div class="service-chips">
+        <label><input type="checkbox" name="interest" value="간병"><span>간병</span></label>
+        <label><input type="checkbox" name="interest" value="병원 동행"><span>병원 동행</span></label>
+        <label><input type="checkbox" name="interest" value="가사·정리"><span>가사·정리</span></label>
+        <label><input type="checkbox" name="interest" value="스마트 홈케어"><span>스마트 홈케어</span></label>
+        <label><input type="checkbox" name="interest" value="기타"><span>기타</span></label>
+      </div>
+    </fieldset>
+
+    <p class="selected-combo" id="modal-selected-combo" hidden></p>
+
+    <label class="consent">
+      <input type="checkbox" id="modal-consent-check" required>
+      <span>개인정보 수집 및 이용에 동의합니다. <b>(필수)</b></span>
+      <button type="button" data-detail="privacy">전문 보기</button>
+    </label>
+    <span class="field-error" id="modal-consent-error"></span>
+
+    <button class="btn primary full" id="modal-submit-btn" type="submit">
+      상담 신청 접수하기 <svg><use href="#i-arrow"/></svg>
+    </button>
+
+    <div class="consult-modal-call">
+      <small>전화 상담 문의</small>
+      <strong><svg style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.8;display:inline-block;vertical-align:middle;margin-right:2px;"><use href="#i-phone"/></svg> 1588-0000</strong>
+      <span>평일 09:00 ~ 18:00</span>
+    </div>
+  </form>
+</dialog>
 
 <!-- 상세 정보 안내 모달 다이얼로그 -->
 <dialog id="detail-dialog">

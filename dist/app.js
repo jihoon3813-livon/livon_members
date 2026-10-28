@@ -332,17 +332,22 @@ $('#apply-example').onclick = () => {
   }
 };
 
-$('#combo-consult').onclick = () => {
-  $('#form-plan').value = state.limit === 7 ? '160' : '320';
+$('#combo-consult').onclick = e => {
+  e.preventDefault();
+  let plan = state.limit === 7 ? '160' : '320';
   let curCombo = combo();
+  $('#form-plan').value = plan;
   $('#selected-combo').hidden = !curCombo;
   $('#selected-combo').textContent = '선택한 조합: ' + curCombo;
+  openConsultModal(plan, curCombo);
 };
 
 $$('[data-select]').forEach(a => {
-  a.onclick = () => {
+  a.onclick = e => {
+    e.preventDefault();
     $('#form-plan').value = a.dataset.select;
     $('#selected-combo').hidden = true;
+    openConsultModal(a.dataset.select, null);
   };
 });
 
@@ -508,6 +513,249 @@ consultForm.onsubmit = async e => {
     submitBtn.innerHTML = origBtnText;
   }
 };
+
+// 8. 상담 신청 팝업 모달 다이얼로그 (하단 상담신청 섹션 외 나머지 상담신청 버튼 클릭 시 팝업)
+const consultDialog = $('#consult-dialog');
+const consultDialogClose = $('.consult-dialog-close');
+const modalConsultForm = $('#modal-consult-form');
+const modalInputName = $('#modal-input-name');
+const modalInputPhone = $('#modal-input-phone');
+const modalFormPlan = $('#modal-form-plan');
+const modalSelectedCombo = $('#modal-selected-combo');
+const modalConsentCheck = $('#modal-consent-check');
+const modalNameError = $('#modal-name-error');
+const modalPhoneError = $('#modal-phone-error');
+const modalConsentError = $('#modal-consent-error');
+const modalSubmitBtn = $('#modal-submit-btn');
+
+function openConsultModal(plan = null, comboText = null) {
+  if (!consultDialog) return;
+
+  // 상품 선택 동기화 (전달된 플랜이 있으면 우선 적용)
+  if (plan && modalFormPlan) {
+    modalFormPlan.value = plan;
+  }
+
+  // 계산기 선택 조합 동기화
+  if (modalSelectedCombo) {
+    if (comboText) {
+      modalSelectedCombo.hidden = false;
+      modalSelectedCombo.textContent = '선택한 조합: ' + comboText;
+    } else {
+      modalSelectedCombo.hidden = true;
+      modalSelectedCombo.textContent = '';
+    }
+  }
+
+  // 이전 에러 상태 초기화
+  if (modalNameError) {
+    modalNameError.textContent = '';
+    modalInputName?.classList.remove('has-error');
+  }
+  if (modalPhoneError) {
+    modalPhoneError.textContent = '';
+    modalInputPhone?.classList.remove('has-error');
+  }
+  if (modalConsentError) {
+    modalConsentError.textContent = '';
+  }
+
+  consultDialog.showModal();
+  setTimeout(() => {
+    modalInputName?.focus();
+  }, 60);
+}
+
+function closeConsultModal() {
+  if (consultDialog && consultDialog.open) {
+    consultDialog.close();
+  }
+}
+
+if (consultDialogClose) {
+  consultDialogClose.onclick = closeConsultModal;
+}
+
+if (consultDialog) {
+  consultDialog.addEventListener('click', e => {
+    if (e.target === consultDialog) {
+      const r = consultDialog.getBoundingClientRect();
+      if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) {
+        closeConsultModal();
+      }
+    }
+  });
+}
+
+// 모달 연락처 하이픈 자동 포맷팅
+if (modalInputPhone) {
+  modalInputPhone.addEventListener('input', e => {
+    let val = e.target.value.replace(/[^0-9]/g, '');
+    if (val.length > 3 && val.length <= 7) {
+      val = val.substring(0, 3) + '-' + val.substring(3);
+    } else if (val.length > 7) {
+      val = val.substring(0, 3) + '-' + val.substring(3, 7) + '-' + val.substring(7, 11);
+    }
+    e.target.value = val;
+    if (modalPhoneError && modalPhoneError.textContent) validateModalPhone();
+  });
+}
+
+if (modalInputName) {
+  modalInputName.addEventListener('input', () => {
+    if (modalNameError && modalNameError.textContent) validateModalName();
+  });
+}
+
+if (modalConsentCheck) {
+  modalConsentCheck.addEventListener('change', () => {
+    if (modalConsentError && modalConsentError.textContent) validateModalConsent();
+  });
+}
+
+function validateModalName() {
+  if (!modalInputName) return false;
+  const val = modalInputName.value.trim();
+  if (!val) {
+    modalNameError.textContent = '성함을 입력해 주세요.';
+    modalInputName.classList.add('has-error');
+    return false;
+  }
+  if (val.length < 2) {
+    modalNameError.textContent = '성함을 2글자 이상 입력해 주세요.';
+    modalInputName.classList.add('has-error');
+    return false;
+  }
+  modalNameError.textContent = '';
+  modalInputName.classList.remove('has-error');
+  return true;
+}
+
+function validateModalPhone() {
+  if (!modalInputPhone) return false;
+  const val = modalInputPhone.value.trim();
+  const phonePattern = /^01[0-9]-[0-9]{3,4}-[0-9]{4}$/;
+  if (!val) {
+    modalPhoneError.textContent = '연락처를 입력해 주세요.';
+    modalInputPhone.classList.add('has-error');
+    return false;
+  }
+  if (!phonePattern.test(val)) {
+    modalPhoneError.textContent = '올바른 휴대전화 번호(010-0000-0000)를 입력해 주세요.';
+    modalInputPhone.classList.add('has-error');
+    return false;
+  }
+  modalPhoneError.textContent = '';
+  modalInputPhone.classList.remove('has-error');
+  return true;
+}
+
+function validateModalConsent() {
+  if (!modalConsentCheck) return false;
+  if (!modalConsentCheck.checked) {
+    modalConsentError.textContent = '개인정보 수집 및 이용에 동의해 주세요.';
+    return false;
+  }
+  modalConsentError.textContent = '';
+  return true;
+}
+
+if (modalConsultForm) {
+  modalConsultForm.onsubmit = async e => {
+    e.preventDefault();
+
+    const isNameValid = validateModalName();
+    const isPhoneValid = validateModalPhone();
+    const isConsentValid = validateModalConsent();
+
+    if (!isNameValid || !isPhoneValid || !isConsentValid) {
+      return;
+    }
+
+    const interests = $$('#modal-consult-form input[name="interest"]:checked').map(cb => cb.value);
+    const curCombo = modalSelectedCombo && !modalSelectedCombo.hidden && modalSelectedCombo.textContent
+      ? modalSelectedCombo.textContent.replace('선택한 조합: ', '')
+      : null;
+
+    const payload = {
+      name: modalInputName.value.trim(),
+      phone: modalInputPhone.value.trim(),
+      plan: modalFormPlan ? modalFormPlan.value : 'undecided',
+      interests: interests,
+      combo: curCombo || null,
+      consent: true
+    };
+
+    const origBtnText = modalSubmitBtn.innerHTML;
+    modalSubmitBtn.disabled = true;
+    modalSubmitBtn.textContent = '접수 중...';
+
+    try {
+      const res = await fetch('/api/consult', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      const result = await res.json();
+
+      if (result.success) {
+        closeConsultModal();
+        openDialog('상담 신청 접수 완료', [
+          `[접수번호: ${result.consultationId}]`,
+          `${payload.name} 고객님의 상담 신청이 정상적으로 등록되었습니다.`,
+          '전문 상담사가 접수된 내용을 확인한 후, 남겨주신 연락처(' + payload.phone + ')로 순차적으로 연락드리겠습니다. 감사합니다.'
+        ]);
+        modalConsultForm.reset();
+        if (modalSelectedCombo) modalSelectedCombo.hidden = true;
+      } else {
+        throw new Error(result.message || '접수 실패');
+      }
+    } catch (err) {
+      try {
+        const offlineId = 'LIVON-' + Date.now().toString(36).toUpperCase();
+        const stored = JSON.parse(localStorage.getItem('livon_consultations') || '[]');
+        stored.unshift({ ...payload, id: offlineId, createdAt: new Date().toISOString() });
+        localStorage.setItem('livon_consultations', JSON.stringify(stored));
+
+        closeConsultModal();
+        openDialog('상담 신청 완료', [
+          `[접수번호: ${offlineId}]`,
+          `${payload.name} 고객님의 상담 신청이 안전하게 접수되었습니다.`,
+          '확인 후 빠른 시일 내에 기재해주신 번호(' + payload.phone + ')로 안내 연락드리겠습니다.'
+        ]);
+        modalConsultForm.reset();
+        if (modalSelectedCombo) modalSelectedCombo.hidden = true;
+      } catch (saveErr) {
+        openDialog('안내', ['상담 접수 처리 중 일시적인 오류가 발생했습니다. 고객센터(1588-0000)로 문의 부탁드립니다.']);
+      }
+    } finally {
+      modalSubmitBtn.disabled = false;
+      modalSubmitBtn.innerHTML = origBtnText;
+    }
+  };
+}
+
+// 하단 상담 섹션(#consult) 외의 모든 상담 신청 링크/버튼 클릭 이벤트 가로채서 모달 띄우기
+document.addEventListener('click', e => {
+  const consultTrigger = e.target.closest('a[href="#consult"]');
+  if (consultTrigger && !consultTrigger.closest('#consult')) {
+    // combo-consult 또는 data-select는 자체 핸들러가 처리
+    if (consultTrigger.id === 'combo-consult' || consultTrigger.dataset.select) {
+      return;
+    }
+    e.preventDefault();
+
+    // 모바일 메뉴가 열려있다면 닫기
+    const mobileNav = $('.mobile-nav');
+    if (mobileNav && !mobileNav.hidden) {
+      mobileNav.hidden = true;
+      $('.menu-toggle')?.setAttribute('aria-expanded', 'false');
+    }
+
+    openConsultModal();
+  }
+});
 
 // 스마트 안심홈 하이브리드 결합형 (플로팅 미니 포토 카드 ↔ 실사 뷰 전환)
 const viewIllust = $('#viewIllust');
