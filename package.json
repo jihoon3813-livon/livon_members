@@ -2,7 +2,6 @@
   "name": "livon_members",
   "version": "1.0.0",
   "description": "리본케어(Livon Care) 라이프케어 멤버십 웹사이트",
-  "main": "server.js",
   "scripts": {
     "dev": "node server.js",
     "start": "node server.js",

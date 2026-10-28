@@ -37,11 +37,15 @@ if (!CONVEX_SITE_URL && process.env.CONVEX_URL) {
 }
 
 // data 디렉토리 및 상담 저장 파일 준비 (로컬 폴백용)
-if (!fs.existsSync(DATA_DIR)) {
-  fs.mkdirSync(DATA_DIR, { recursive: true });
-}
-if (!fs.existsSync(CONSULT_FILE)) {
-  fs.writeFileSync(CONSULT_FILE, JSON.stringify([], null, 2), 'utf-8');
+try {
+  if (!fs.existsSync(DATA_DIR)) {
+    fs.mkdirSync(DATA_DIR, { recursive: true });
+  }
+  if (!fs.existsSync(CONSULT_FILE)) {
+    fs.writeFileSync(CONSULT_FILE, JSON.stringify([], null, 2), 'utf-8');
+  }
+} catch (e) {
+  // 읽기 전용 파일시스템(서버리스 환경) 무시
 }
 
 const MIME_TYPES = {
@@ -245,4 +249,8 @@ server.on('error', (e) => {
   }
 });
 
-startServer(PORT);
+if (require.main === module) {
+  startServer(PORT);
+}
+
+module.exports = server;
