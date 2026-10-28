@@ -1,0 +1,22 @@
+{
+  "name": "livon_members",
+  "version": "1.0.0",
+  "description": "리본케어(Livon Care) 라이프케어 멤버십 웹사이트",
+  "main": "server.js",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js",
+    "convex:dev": "npx convex dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jihoon3813-livon/livon_members.git"
+  },
+  "keywords": [
+    "livon-care",
+    "convex",
+    "membership"
+  ],
+  "author": "",
+  "license": "ISC"
+}

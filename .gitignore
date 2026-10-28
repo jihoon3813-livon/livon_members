@@ -1,0 +1,18 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Convex
+.convex/
+.env
+.env.local
+
+# Logs and runtime
+*.log
+npm-debug.log*
+
+# Data & Temp
+data/
+.system_generated/
+.DS_Store
+Thumbs.db
