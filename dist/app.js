@@ -3,18 +3,11 @@ const $$ = s => [...document.querySelectorAll(s)];
 
 // 1. 케어 탭 데이터
 const data = {
-  treatment: {
-    lead: '치료와 회복에 필요한 실질적인 도움을 선택하세요.',
-    tag: '통합 한도 차감',
-    items: [
-      ['heart', '간병인 지원', '입원 중 곁에서 필요한 일상 돌봄을 지원합니다.', '24시간 · 1회 차감', 'care'],
-      ['cross', '간호사 동행', '병원 진료에 도움이 필요한 순간, 함께합니다.', '이용 기준 보기 ↗', 'nurse'],
-      ['car', '차량 에스코트', '병원까지의 이동이 필요한 날을 위한 지원입니다.', '이용 기준 보기 ↗', 'car'],
-      ['leaf', '가사도우미', '회복하는 동안 부담되는 집안일을 돕습니다.', '4시간 · 0.5회 차감', 'home'],
-      ['house', '정리수납', '일상으로 돌아갈 공간을 편안하게 정리합니다.', '1곳 4시간 · 1회 차감', 'organize']
-    ]
-  },
   daily: {
+    bannerImg: 'https://res.cloudinary.com/lyjyvy54/image/upload/v1793162155/%EA%B1%B4%EA%B0%95%ED%95%9C_%EC%9D%BC%EC%83%81%EC%9D%84_%EC%9C%84%ED%95%9C_%EB%A6%AC%EB%B3%B8%EC%BC%80%EC%96%B4-2_k6velv.png',
+    bannerTitle: '01 평상시 케어 — 건강한 일상을 위한 리본케어',
+    bannerAlt: '01 평상시 케어 안내 배너 - 건강한 일상을 위한 리본케어',
+    bannerFallback: 'assets/daily-care.png',
     lead: '건강할 때부터, 일상 속 건강관리를 함께 준비합니다.',
     tag: '기본 포함',
     items: [
@@ -25,17 +18,40 @@ const data = {
       ['spark', '건강정보', '일상 속 건강관리에 참고할 정보를 제공합니다.', '제공 범위 보기 ↗', 'daily']
     ]
   },
-  smart: {
-    lead: '병원 밖, 집에서도 이어지는 돌봄을 연결합니다.',
-    tag: '패키지 5회 차감',
+  treatment: {
+    bannerImg: 'https://res.cloudinary.com/lyjyvy54/image/upload/v1793162156/%EC%B9%98%EB%A3%8C%EB%B6%80%ED%84%B0_%ED%9A%8C%EB%B3%B5%EA%B9%8C%EC%A7%80_%ED%95%A8%EA%BB%98%ED%95%98%EB%8A%94_%EB%A6%AC%EB%B3%B8%EC%BC%80%EC%96%B4-1_lubz9k.png',
+    bannerTitle: '02 치료지원 케어 — 치료부터 회복까지 함께하는 리본케어',
+    bannerAlt: '02 치료지원 케어 안내 배너 - 치료부터 회복까지 함께하는 리본케어',
+    bannerFallback: 'assets/treatment-care.png',
+    lead: '치료와 회복에 필요한 실질적인 도움을 선택하세요.',
+    tag: '통합 한도 차감',
     items: [
-      ['phone', '케어비전 태블릿', '스마트 홈케어를 이용하는 중심 기기입니다.', '패키지 구성 보기 ↗', 'smart'],
-      ['house', '홈 센서', '생활 환경에 맞춰 구성하는 센서 패키지입니다.', '패키지 구성 보기 ↗', 'smart'],
+      ['heart', '간병인 지원', '입원 중 곁에서 필요한 일상 돌봄을 지원합니다.', '24시간 · 1회 차감', 'care'],
+      ['cross', '간호사 동행', '병원 진료에 도움이 필요한 순간, 함께합니다.', '이용 기준 보기 ↗', 'nurse'],
+      ['car', '차량 에스코트', '병원까지의 이동이 필요한 날을 위한 지원입니다.', '이용 기준 보기 ↗', 'car'],
+      ['leaf', '가사도우미', '회복하는 동안 부담되는 집안일을 돕습니다.', '4시간 · 0.5회 차감', 'home'],
+      ['house', '정리수납', '일상으로 돌아갈 공간을 편안하게 정리합니다.', '1곳 4시간 · 1회 차감', 'organize']
+    ]
+  },
+  smart: {
+    bannerImg: 'https://res.cloudinary.com/lyjyvy54/image/upload/v1793162154/%EC%A7%91%EC%97%90%EC%84%9C_%EC%9D%B4%EC%96%B4%EC%A7%80%EB%8A%94_%EB%94%B0%EB%9CBB%ED%95%9C_%EB%8F%8C%EB%B4%84_e17pwf.png',
+    bannerTitle: '03 스마트 홈케어 — 집에서 이어지는 따뜻한 돌봄',
+    bannerAlt: '03 스마트 홈케어 안내 배너 - 집에서 이어지는 따뜻한 돌봄',
+    bannerFallback: 'assets/smart-home-care.png',
+    lead: '병원 밖, 집에서도 이어지는 돌봄을 5년간 무상으로 연결합니다.',
+    tag: '5년 무상 (한도 5회 차감)',
+    items: [
+      ['phone', '케어비전 태블릿', '스마트 홈케어 5년 무상 이용 중심 기기입니다.', '패키지 구성 보기 ↗', 'smart'],
+      ['house', '홈 센서', '생활 환경에 맞춰 구성하는 5년 무상 센서 패키지입니다.', '패키지 구성 보기 ↗', 'smart'],
       ['heart', '보호자 연결', '실제 지원 가능한 가족 연결·알림 기능을 제공합니다.', '패키지 구성 보기 ↗', 'smart'],
-      ['spark', '설치·이용 안내', '설치부터 사용법까지 이용 절차를 안내합니다.', '패키지 구성 보기 ↗', 'smart']
+      ['spark', '설치·이용 안내', '5년 무상 제공 (이후 월 이용료 발생 가능).', '패키지 구성 보기 ↗', 'smart']
     ]
   },
   extra: {
+    bannerImg: 'https://res.cloudinary.com/lyjyvy54/image/upload/v1793162154/%EA%B1%B4%EA%B0%95%EA%B3%BC_%EA%B0%80%EC%A1%B1%EC%9D%84_%EC%9C%84%ED%95%9C_%EB%84%A4_%EA%B0%80%EC%A7%80_%ED%98%9C%ED%83%9D_bzrbru.png',
+    bannerTitle: '04 추가 지원 케어 — 건강과 가족을 위한 네 가지 혜택',
+    bannerAlt: '04 추가 지원 케어 안내 배너 - 건강과 가족을 위한 네 가지 혜택',
+    bannerFallback: 'assets/membership-benefits.png',
     lead: '건강과 가족의 일상에 더하는 멤버십 혜택입니다.',
     tag: '횟수 차감 없음',
     items: [
@@ -52,6 +68,10 @@ function renderTab(key) {
   let x = data[key];
   if (!x) return;
   $('#care-panel').innerHTML = `
+    <div class="care-panel-banner" data-preview-img="${x.bannerImg}" data-preview-title="${x.bannerTitle}" title="클릭하면 큰 화면으로 볼 수 있습니다">
+      <img src="${x.bannerImg}" alt="${x.bannerAlt}" loading="lazy" onerror="this.onerror=null;this.src='${x.bannerFallback}';">
+      <span class="banner-zoom-hint"><svg><use href="#i-zoom"/></svg> 배너 크게 보기</span>
+    </div>
     <div class="care-panel-head">
       <p>${x.lead}</p>
       <span class="badge">${x.tag}</span>
@@ -120,8 +140,8 @@ const details = {
   ],
   smart: [
     '리본 스마트 안심홈 이용 안내',
-    '케어비전 태블릿과 홈 센서, 가족을 위한 안심 보호자 연결 기능을 결합하는 패키지입니다. 통합 한도에서 5회를 차감합니다.',
-    '장비 구성·제공기간·대여 및 반환 기준·설치 조건은 확정 전입니다. 화면의 장비와 기능 표현은 이해를 돕는 일러스트입니다.'
+    '케어비전 태블릿과 홈 센서, 가족을 위한 안심 보호자 연결 기능을 결합하는 패키지입니다. 통합 한도에서 5회를 차감하여 5년간 무상으로 기본 제공되며, 5년 이후에는 월 이용료가 발생할 수 있습니다.',
+    '장비 구성·대여 및 반환 기준·설치 조건은 최종 확정 시 안내됩니다. 화면의 장비와 기능 표현은 실제 거실 연출 및 이해를 돕는 일러스트입니다.'
   ],
   daily: [
     '평상시 케어 안내',
@@ -488,3 +508,54 @@ consultForm.onsubmit = async e => {
     submitBtn.innerHTML = origBtnText;
   }
 };
+
+// 스마트 안심홈 하이브리드 결합형 (플로팅 미니 포토 카드 ↔ 실사 뷰 전환)
+const viewIllust = $('#viewIllust');
+const viewPhoto = $('#viewPhoto');
+const floatingCard = $('#floatingPhotoCard');
+const switchBackBtn = $('#switchBackBtn');
+
+function switchSmartView(mode) {
+  if (!viewIllust || !viewPhoto) return;
+  if (mode === 'photo') {
+    viewIllust.classList.remove('active');
+    viewPhoto.classList.add('active');
+  } else {
+    viewPhoto.classList.remove('active');
+    viewIllust.classList.add('active');
+  }
+}
+
+if (floatingCard) {
+  floatingCard.addEventListener('click', e => {
+    e.stopPropagation();
+    switchSmartView('photo');
+  });
+}
+
+if (switchBackBtn) {
+  switchBackBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    switchSmartView('illust');
+  });
+}
+
+// 혜택 상세 토글 아코디언 인터랙션
+document.addEventListener('click', e => {
+  const toggleBtn = e.target.closest('.benefit-toggle-btn');
+  if (!toggleBtn) return;
+  const content = toggleBtn.nextElementSibling;
+  if (!content) return;
+  const isOpen = content.classList.contains('open');
+  if (isOpen) {
+    content.classList.remove('open');
+    toggleBtn.classList.remove('open');
+    toggleBtn.setAttribute('aria-expanded', 'false');
+    toggleBtn.querySelector('span').textContent = '어떤 혜택인가요? 상세 보기';
+  } else {
+    content.classList.add('open');
+    toggleBtn.classList.add('open');
+    toggleBtn.setAttribute('aria-expanded', 'true');
+    toggleBtn.querySelector('span').textContent = '상세 혜택 접기';
+  }
+});
