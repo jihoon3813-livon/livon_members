@@ -1033,10 +1033,43 @@ async function fetchAndRenderReviews() {
 
 // 초기 실행
 document.addEventListener('DOMContentLoaded', () => {
+  initHeroVideoSound();
   trackVisitor();
   fetchAndRenderReviews();
   fetchAndApplySiteSettings();
 });
+
+// ==========================================================================
+// 히어로 브랜드 영상 소리 토글 (HTML5 Video)
+// ==========================================================================
+function initHeroVideoSound() {
+  const soundBtn = document.getElementById('hero-sound-btn');
+  const video = document.getElementById('hero-main-video');
+  if (!soundBtn || !video) return;
+
+  const labelEl = soundBtn.querySelector('.sound-label');
+
+  // 모바일 및 저전력 모드 자동 재생 트리거 보장
+  video.play().catch(() => {});
+
+  soundBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (video.muted) {
+      // 소리 켜기
+      video.muted = false;
+      video.volume = 1.0;
+      soundBtn.classList.remove('is-muted');
+      if (labelEl) labelEl.textContent = '소리 끄기';
+      soundBtn.setAttribute('aria-label', '소리 끄기');
+    } else {
+      // 소리 끄기
+      video.muted = true;
+      soundBtn.classList.add('is-muted');
+      if (labelEl) labelEl.textContent = '소리 켜기';
+      soundBtn.setAttribute('aria-label', '소리 켜기');
+    }
+  });
+}
 
 // 3. 사이트 설정 (푸터 및 개인정보 동의) 동적 로드 및 반영
 async function fetchAndApplySiteSettings() {

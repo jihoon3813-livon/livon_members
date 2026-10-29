@@ -179,6 +179,42 @@
     <div class="container fine hero-fine">서비스별 차감 기준이 적용됩니다. 다른 케어를 선택하면 이용 가능한 간병 일수가 달라집니다.</div>
   </section>
 
+  <!-- 브랜드 동영상 섹션 -->
+  <section class="hero-video-section" aria-label="리본케어 소개 영상">
+    <div class="container">
+      <div class="hero-video-card">
+        <div class="hero-video-box">
+          <video
+            id="hero-main-video"
+            src="https://res.cloudinary.com/mmo2pulq/video/upload/v1793265286/%EB%A6%AC%EB%B3%B8%EC%BC%80%EC%96%B4%EB%A9%A4%EB%B2%84%EC%8B%AD_%EC%98%81%EC%83%81.mp4"
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="metadata"
+          ></video>
+          <button type="button" class="hero-video-sound-toggle is-muted" id="hero-sound-btn" aria-label="소리 켜기">
+            <span class="sound-icon sound-icon-muted" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                <line x1="23" y1="9" x2="17" y2="15"></line>
+                <line x1="17" y1="9" x2="23" y2="15"></line>
+              </svg>
+            </span>
+            <span class="sound-icon sound-icon-active" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+              </svg>
+            </span>
+            <span class="sound-label">소리 켜기</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- 리본케어 소개 (삼성화재/현대해상 공식 파트너십 - 다크 테마) -->
   <section
     class="section company-section company-dark"

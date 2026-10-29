@@ -3197,6 +3197,134 @@ dialog.dialog-deduct .dialog-done:hover {
   }
 }
 
+/* ==========================================================================
+   히어로 동영상 섹션 (YouTube Brand Video)
+   ========================================================================== */
+.hero-video-section {
+  background: #f5f7f1;
+  padding: 10px 0 65px;
+  position: relative;
+}
+
+.hero-video-card {
+  max-width: 1200px;
+  margin: 0 auto;
+  border-radius: 24px;
+  overflow: hidden;
+  background: #000;
+  box-shadow: 0 20px 50px rgba(37, 62, 55, 0.12), 0 4px 14px rgba(37, 62, 55, 0.05);
+  border: 1px solid rgba(223, 229, 223, 0.9);
+  position: relative;
+}
+
+.hero-video-box {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%; /* 16:9 aspect ratio */
+  overflow: hidden;
+  background: #050d0b;
+}
+
+.hero-video-box video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.hero-video-sound-toggle {
+  position: absolute;
+  bottom: 22px;
+  right: 22px;
+  z-index: 5;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: rgba(12, 26, 23, 0.82);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 9999px;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s, border-color 0.2s;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+.hero-video-sound-toggle:hover {
+  background: rgba(12, 26, 23, 0.95);
+  border-color: rgba(255, 255, 255, 0.45);
+  transform: translateY(-2px);
+}
+
+.hero-video-sound-toggle:active {
+  transform: translateY(0) scale(0.97);
+}
+
+.hero-video-sound-toggle:not(.is-muted) {
+  background: rgba(212, 103, 132, 0.92);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.hero-video-sound-toggle:not(.is-muted):hover {
+  background: rgba(185, 78, 107, 0.98);
+}
+
+.hero-video-sound-toggle .sound-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-video-sound-toggle .sound-icon svg {
+  width: 17px;
+  height: 17px;
+  stroke: #ffffff;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  display: block;
+}
+
+.hero-video-sound-toggle.is-muted .sound-icon-active {
+  display: none !important;
+}
+
+.hero-video-sound-toggle:not(.is-muted) .sound-icon-muted {
+  display: none !important;
+}
+
+@media (max-width: 768px) {
+  .hero-video-section {
+    padding: 0 0 45px;
+  }
+  .hero-video-card {
+    border-radius: 16px;
+  }
+  .hero-video-sound-toggle {
+    bottom: 14px;
+    right: 14px;
+    padding: 8px 14px;
+    font-size: 12px;
+    gap: 6px;
+  }
+  .hero-video-sound-toggle .sound-icon svg {
+    width: 15px;
+    height: 15px;
+  }
+}
+
+
 
 
 
