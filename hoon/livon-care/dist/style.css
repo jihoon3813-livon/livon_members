@@ -2349,6 +2349,7 @@ dialog.dialog-deduct .dialog-done:hover {
   padding: 6px 14px;
   border-radius: 20px;
   backdrop-filter: blur(8px);
+  white-space: nowrap;
 }
 
 .company-tag svg {
@@ -2361,6 +2362,7 @@ dialog.dialog-deduct .dialog-done:hover {
   font-weight: 600;
   letter-spacing: .14em;
   color: #7b9985;
+  white-space: nowrap;
 }
 
 .company-heading {
@@ -2387,8 +2389,13 @@ dialog.dialog-deduct .dialog-done:hover {
   color: #ffffff;
 }
 
+.company-title-line {
+  display: block;
+}
+
 .company-heading h2 em {
   color: #7dd3a8;
+  font-style: normal;
 }
 
 .company-intro-box {
@@ -2888,7 +2895,13 @@ dialog.dialog-deduct .dialog-done:hover {
   }
 
   .company-heading h2 {
-    font-size: 26px;
+    font-size: clamp(17px, 5.2vw, 24px);
+    line-height: 1.36;
+    letter-spacing: -0.045em;
+  }
+  .company-title-line {
+    display: block;
+    white-space: nowrap;
   }
 
   .company-intro-box {
@@ -3000,12 +3013,16 @@ dialog.dialog-deduct .dialog-done:hover {
     display: inline !important;
   }
 
-  /* 01. 회사 소개 제목 줄바꿈 정돈 */
+  /* 01. 회사 소개 제목 줄바꿈 정돈 (모바일 2줄 고정) */
   .company-heading h2 {
-    font-size: 24px;
-    line-height: 1.38;
-    letter-spacing: -0.04em;
-    word-break: keep-all;
+    font-size: clamp(17px, 5.2vw, 24px) !important;
+    line-height: 1.36 !important;
+    letter-spacing: -0.045em !important;
+    word-break: keep-all !important;
+  }
+  .company-title-line {
+    display: block !important;
+    white-space: nowrap !important;
   }
 
   /* 03. 혜택 섹션 안내 뱃지 그룹 정렬 */
