@@ -6,9 +6,13 @@ const http = httpRouter();
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+  "Access-Control-Allow-Methods": "GET, POST, PATCH, DELETE, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type",
 };
+
+// ==========================================
+// 1. 상담 신청 관련 (/api/consult)
+// ==========================================
 
 // POST /api/consult
 http.route({
@@ -82,6 +86,72 @@ http.route({
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json; charset=utf-8" },
     });
+  }),
+});
+
+// ==========================================
+// 2. 실제 후기 관련 (/api/reviews)
+// ==========================================
+
+// OPTIONS /api/reviews
+http.route({
+  path: "/api/reviews",
+  method: "OPTIONS",
+  handler: httpAction(async () => {
+    return new Response(null, {
+      status: 204,
+      headers: corsHeaders,
+    });
+  }),
+});
+
+// GET /api/reviews
+http.route({
+  path: "/api/reviews",
+  method: "GET",
+  handler: httpAction(async (ctx, request) => {
+    const url = new URL(request.url);
+    const showAll = url.searchParams.get("all") === "true";
+    const reviews = showAll
+      ? await ctx.runQuery(api.reviews.listAll, {})
+      : await ctx.runQuery(api.reviews.listVisible, {});
+
+    return new Response(JSON.stringify({ success: true, reviews }), {
+      status: 200,
+      headers: { ...corsHeaders, "Content-Type": "application/json; charset=utf-8" },
+    });
+  }),
+});
+
+// POST /api/reviews (후기 시딩 또는 신규 등록)
+http.route({
+  path: "/api/reviews",
+  method: "POST",
+  handler: httpAction(async (ctx, request) => {
+    try {
+      const body = await request.json();
+      if (body.seed === true) {
+        const result = await ctx.runMutation(api.reviews.seed, {});
+        return new Response(JSON.stringify(result), {
+          status: 200,
+          headers: { ...corsHeaders, "Content-Type": "application/json; charset=utf-8" },
+        });
+      }
+
+      const result = await ctx.runMutation(api.reviews.create, body);
+      return new Response(JSON.stringify(result), {
+        status: 201,
+        headers: { ...corsHeaders, "Content-Type": "application/json; charset=utf-8" },
+      });
+    } catch (e: any) {
+      return new Response(
+        JSON.stringify({ success: false, message: e.message }),
+        {
+          status: 500,
+          headers: { ...corsHeaders, "Content-Type": "application/json; charset=utf-8" },
+        }
+      );
+    }
   }),
 });
 

@@ -352,9 +352,9 @@ async function handleLocalFileMock(url, options = {}) {
   }
 
   if (url.includes('/api/admin/reviews') || url.includes('/api/reviews')) {
-    let reviews = JSON.parse(localStorage.getItem('livon_mock_reviews') || '[]');
     const matchToggle = url.match(/\/api\/admin\/reviews\/([^/?]+)\/toggle/);
     if (matchToggle) {
+      let reviews = JSON.parse(localStorage.getItem('livon_mock_reviews') || '[]');
       const rId = matchToggle[1];
       const rev = reviews.find(r => r.id === rId);
       if (rev) {
@@ -365,10 +365,31 @@ async function handleLocalFileMock(url, options = {}) {
     }
     const matchId = url.match(/\/api\/admin\/reviews\/([^/?]+)/);
     if (matchId && method === 'DELETE') {
+      let reviews = JSON.parse(localStorage.getItem('livon_mock_reviews') || '[]');
       reviews = reviews.filter(r => r.id !== matchId[1]);
       localStorage.setItem('livon_mock_reviews', JSON.stringify(reviews));
       return { success: true };
     }
+
+    // Convex 운영 DB에서 실시간 후기 목록 우선 조회
+    try {
+      const convexUrl = 'https://perceptive-pig-703.ap-southeast-2.convex.site';
+      const rRes = await fetch(`${convexUrl}/api/reviews?all=true`, { cache: 'no-store' });
+      if (rRes.ok) {
+        const rData = await rRes.json();
+        if (rData && Array.isArray(rData.reviews) && rData.reviews.length > 0) {
+          const mappedReviews = rData.reviews.map(r => ({
+            id: r._id || r.id,
+            ...r
+          }));
+          return { success: true, reviews: mappedReviews };
+        }
+      }
+    } catch (e) {
+      console.warn('Convex 실시간 후기 조회 실패, 폴백 사용:', e);
+    }
+
+    let reviews = JSON.parse(localStorage.getItem('livon_mock_reviews') || '[]');
     return { success: true, reviews };
   }
 

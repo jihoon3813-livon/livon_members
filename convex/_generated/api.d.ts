@@ -10,6 +10,7 @@
 
 import type * as consultations from "../consultations.js";
 import type * as http from "../http.js";
+import type * as reviews from "../reviews.js";
 
 import type {
   ApiFromModules,
@@ -20,6 +21,7 @@ import type {
 declare const fullApi: ApiFromModules<{
   consultations: typeof consultations;
   http: typeof http;
+  reviews: typeof reviews;
 }>;
 
 /**
