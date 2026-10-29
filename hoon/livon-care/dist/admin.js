@@ -11,9 +11,41 @@ const API = {
   settings: '/api/admin/settings'
 };
 
+// 로그인 세션 유지 시간: 3시간 (밀리초)
+const SESSION_DURATION = 3 * 60 * 60 * 1000;
+
+// 세션 유효성 판별
+function isSessionValid() {
+  const token = localStorage.getItem('livon_admin_token');
+  const loginAt = parseInt(localStorage.getItem('livon_admin_login_at') || '0', 10);
+  if (!token || !loginAt) return false;
+  const now = Date.now();
+  if (now - loginAt > SESSION_DURATION) {
+    clearSession();
+    return false;
+  }
+  return true;
+}
+
+// 세션 초기화
+function clearSession() {
+  state.token = '';
+  localStorage.removeItem('livon_admin_token');
+  localStorage.removeItem('livon_admin_login_at');
+}
+
+// 401 또는 세션 만료 처리
+function handleUnauthorized(showToastMsg = true) {
+  clearSession();
+  document.getElementById('login-overlay').style.display = 'flex';
+  if (showToastMsg) {
+    showToast('로그인이 필요하거나 세션(3시간)이 만료되었습니다.', 'error');
+  }
+}
+
 // 전역 상태
 const state = {
-  token: localStorage.getItem('livon_admin_token') || '',
+  token: isSessionValid() ? (localStorage.getItem('livon_admin_token') || '') : '',
   activeTab: 'dashboard',
   consultations: [],
   consultFilter: 'all',
@@ -38,19 +70,22 @@ async function fetchWithAuth(url, options = {}) {
 
   // 로컬 파일(file://) 프로토콜 대응 Mock 핸들러
   if (window.location.protocol === 'file:') {
-    return handleLocalFileMock(url, options);
+    return await handleLocalFileMock(url, options);
   }
 
   try {
     const res = await fetch(url, { ...options, headers });
     if (res.status === 401) {
-      handleUnauthorized();
+      handleUnauthorized(true);
       throw new Error('인증이 만료되었습니다. 다시 로그인해 주세요.');
+    }
+    if (!res.ok) {
+      return await handleLocalFileMock(url, options);
     }
     return await res.json();
   } catch (err) {
-    console.warn('API Error, 폴백 모드로 전환:', err);
-    return handleLocalFileMock(url, options);
+    console.warn('API 호출 폴백 전환:', err);
+    return await handleLocalFileMock(url, options);
   }
 }
 
@@ -206,7 +241,7 @@ function syncStorageData(force = false) {
 syncStorageData();
 
 // 오프라인 / file:// 프로토콜 로컬 스토리지 Fallback 데이터 핸들러
-function handleLocalFileMock(url, options = {}) {
+async function handleLocalFileMock(url, options = {}) {
   const method = (options.method || 'GET').toUpperCase();
   const body = options.body ? JSON.parse(options.body) : {};
 
@@ -222,7 +257,7 @@ function handleLocalFileMock(url, options = {}) {
   }
 
   if (url.includes('/api/admin/check-auth')) {
-    return { success: true, authenticated: true };
+    return { success: true, authenticated: isSessionValid() };
   }
 
   if (url.includes('/api/admin/change-password')) {
@@ -235,24 +270,84 @@ function handleLocalFileMock(url, options = {}) {
   }
 
   if (url.includes('/api/admin/consultations')) {
-    let consults = JSON.parse(localStorage.getItem('livon_mock_consult') || '[]');
     const matchId = url.match(/\/api\/admin\/consultations\/([^/?]+)/);
+    const overrides = JSON.parse(localStorage.getItem('livon_consult_overrides') || '{}');
+
     if (matchId) {
       const cId = matchId[1];
       if (method === 'PATCH') {
-        const item = consults.find(c => c.id === cId);
-        if (item) {
-          if (body.status !== undefined) item.status = body.status;
-          if (body.adminMemo !== undefined) item.adminMemo = body.adminMemo;
-          localStorage.setItem('livon_mock_consult', JSON.stringify(consults));
-          return { success: true, consultation: item };
-        }
+        overrides[cId] = overrides[cId] || {};
+        if (body.status !== undefined) overrides[cId].status = body.status;
+        if (body.adminMemo !== undefined) overrides[cId].adminMemo = body.adminMemo;
+        localStorage.setItem('livon_consult_overrides', JSON.stringify(overrides));
+        return { success: true, consultation: { id: cId, ...overrides[cId] } };
       } else if (method === 'DELETE') {
-        consults = consults.filter(c => c.id !== cId);
-        localStorage.setItem('livon_mock_consult', JSON.stringify(consults));
+        overrides[cId] = { deleted: true };
+        localStorage.setItem('livon_consult_overrides', JSON.stringify(overrides));
         return { success: true };
       }
     }
+
+    // 1. Convex 운영 DB에서 실시간 상담 신청 목록 직접 조회
+    let consults = [];
+    try {
+      const convexUrl = 'https://perceptive-pig-703.ap-southeast-2.convex.site';
+      const cRes = await fetch(`${convexUrl}/api/consult`, { cache: 'no-store' });
+      if (cRes.ok) {
+        const cList = await cRes.json();
+        if (Array.isArray(cList)) {
+          consults = cList.map(item => ({
+            id: item._id || item.id,
+            name: item.name,
+            phone: item.phone,
+            plan: item.plan || 'undecided',
+            interests: Array.isArray(item.interests) ? item.interests : [],
+            combo: item.combo || null,
+            status: item.status || '접수',
+            createdAt: item.createdAt || (item._creationTime ? new Date(item._creationTime).toISOString() : new Date().toISOString()),
+            adminMemo: item.adminMemo || ''
+          }));
+        }
+      }
+    } catch (e) {
+      console.warn('Convex 실시간 상담 조회 실패, 로컬 폴백 사용:', e);
+    }
+
+    // 2. 브라우저 localStorage(livon_consultations)에 보관된 오프라인 상담 내역도 병합
+    const offlineConsults = JSON.parse(localStorage.getItem('livon_consultations') || '[]');
+    offlineConsults.forEach(off => {
+      if (!consults.some(c => c.id === off.id || (c.phone === off.phone && c.name === off.name))) {
+        consults.push({
+          id: off.id || 'C-' + Date.now().toString(36).toUpperCase(),
+          name: off.name,
+          phone: off.phone,
+          plan: off.plan || 'undecided',
+          interests: Array.isArray(off.interests) ? off.interests : [],
+          combo: off.combo || null,
+          status: off.status || '접수',
+          createdAt: off.createdAt || new Date().toISOString(),
+          adminMemo: off.adminMemo || ''
+        });
+      }
+    });
+
+    // 3. 로컬 수정(상태/메모) 오버라이드 적용 및 삭제 건 제외
+    consults = consults
+      .filter(c => !overrides[c.id] || !overrides[c.id].deleted)
+      .map(c => {
+        if (overrides[c.id]) {
+          return {
+            ...c,
+            status: overrides[c.id].status !== undefined ? overrides[c.id].status : c.status,
+            adminMemo: overrides[c.id].adminMemo !== undefined ? overrides[c.id].adminMemo : c.adminMemo
+          };
+        }
+        return c;
+      });
+
+    // 4. 최신 등록순 정렬
+    consults.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
     return { success: true, consultations: consults };
   }
 
@@ -418,24 +513,13 @@ function switchTab(tabId) {
 
 // 초기화
 document.addEventListener('DOMContentLoaded', async () => {
-  // 1. 세션 토큰 검사
-  if (state.token) {
-    try {
-      const res = await fetch(API.checkAuth, {
-        headers: { 'Authorization': `Bearer ${state.token}` }
-      });
-      const data = await res.json();
-      if (data.authenticated) {
-        document.getElementById('login-overlay').style.display = 'none';
-        initApp();
-      } else {
-        handleUnauthorized();
-      }
-    } catch (e) {
-      handleUnauthorized();
-    }
+  // 1. 3시간 세션 유효성 검사 (새로고침 시 자동 유지)
+  if (isSessionValid()) {
+    state.token = localStorage.getItem('livon_admin_token') || '';
+    document.getElementById('login-overlay').style.display = 'none';
+    initApp();
   } else {
-    document.getElementById('login-overlay').style.display = 'flex';
+    handleUnauthorized(false);
   }
 
   // 로그인 폼 이벤트
@@ -452,7 +536,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
       let data;
       if (window.location.protocol === 'file:') {
-        data = handleLocalFileMock(API.login, { method: 'POST', body: JSON.stringify({ password: pwdInput.value }) });
+        data = await handleLocalFileMock(API.login, { method: 'POST', body: JSON.stringify({ password: pwdInput.value }) });
       } else {
         try {
           const res = await fetch(API.login, {
@@ -460,22 +544,27 @@ document.addEventListener('DOMContentLoaded', async () => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ password: pwdInput.value })
           });
-          data = await res.json();
+          if (res.ok) {
+            data = await res.json();
+          } else {
+            data = await handleLocalFileMock(API.login, { method: 'POST', body: JSON.stringify({ password: pwdInput.value }) });
+          }
         } catch (fetchErr) {
           // 서버 연결 실패 시 로컬 Fallback
-          data = handleLocalFileMock(API.login, { method: 'POST', body: JSON.stringify({ password: pwdInput.value }) });
+          data = await handleLocalFileMock(API.login, { method: 'POST', body: JSON.stringify({ password: pwdInput.value }) });
         }
       }
 
       if (data && data.success && data.token) {
         state.token = data.token;
         localStorage.setItem('livon_admin_token', data.token);
+        localStorage.setItem('livon_admin_login_at', Date.now().toString());
         document.getElementById('login-overlay').style.display = 'none';
         pwdInput.value = '';
-        showToast('관리자 시스템에 성공적으로 로그인했습니다.');
+        showToast('관리자 시스템에 성공적으로 로그인했습니다. (3시간 유지)');
         initApp();
       } else {
-        errorBox.textContent = data.message || '비밀번호가 올바르지 않습니다.';
+        errorBox.textContent = (data && data.message) || '비밀번호가 올바르지 않습니다.';
         errorBox.style.display = 'block';
       }
     } catch (err) {
@@ -493,7 +582,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
       await fetchWithAuth(API.logout, { method: 'POST' });
     } catch (e) {}
-    handleUnauthorized();
+    handleUnauthorized(false);
+    showToast('안전하게 로그아웃되었습니다.');
   });
 
   // 사이드바 메뉴 클릭
