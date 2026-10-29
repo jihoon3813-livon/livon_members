@@ -4,7 +4,7 @@ const $$ = s => [...document.querySelectorAll(s)];
 // 1. 케어 탭 데이터
 const data = {
   daily: {
-    bannerImg: 'https://res.cloudinary.com/lyjyvy54/image/upload/v1793240879/%EA%B1%B4%EA%B0%95%ED%95%9C_%EC%9D%BC%EC%83%81%EC%9D%84_%EB%8F%95%EB%8A%94_%EB%A6%AC%EB%B3%B8%EC%BC%80%EC%96%B4-1_ktbsqo.png',
+    bannerImg: 'https://res.cloudinary.com/lyjyvy54/image/upload/f_auto,q_auto,w_1200/v1793240879/%EA%B1%B4%EA%B0%95%ED%95%9C_%EC%9D%BC%EC%83%81%EC%9D%84_%EB%8F%95%EB%8A%94_%EB%A6%AC%EB%B3%B8%EC%BC%80%EC%96%B4-1_ktbsqo.png',
     bannerTitle: '01 평상시 케어 — 건강한 일상을 돕는 리본케어',
     bannerAlt: '01 평상시 케어 안내 배너 - 건강한 일상을 돕는 리본케어',
     bannerFallback: 'assets/daily-care.png',
@@ -19,7 +19,7 @@ const data = {
     ]
   },
   treatment: {
-    bannerImg: 'https://res.cloudinary.com/lyjyvy54/image/upload/v1793240879/%EC%B9%98%EB%A3%8C%EB%B6%80%ED%84%B0_%ED%9A%8C%EB%B3%B5%EA%B9%8C%EC%A7%80_%ED%95%A8%EA%BB%98%ED%95%98%EB%8A%94_%EC%BC%80%EC%96%B4-2_yqqzoo.png',
+    bannerImg: 'https://res.cloudinary.com/lyjyvy54/image/upload/f_auto,q_auto,w_1200/v1793240879/%EC%B9%98%EB%A3%8C%EB%B6%80%ED%84%B0_%ED%9A%8C%EB%B3%B5%EA%B9%8C%EC%A7%80_%ED%95%A8%EA%BB%98%ED%95%98%EB%8A%94_%EC%BC%80%EC%96%B4-2_yqqzoo.png',
     bannerTitle: '02 치료지원 케어 — 치료부터 회복까지 함께하는 케어',
     bannerAlt: '02 치료지원 케어 안내 배너 - 치료부터 회복까지 함께하는 케어',
     bannerFallback: 'assets/treatment-care.png',
@@ -34,7 +34,7 @@ const data = {
     ]
   },
   smart: {
-    bannerImg: 'https://res.cloudinary.com/lyjyvy54/image/upload/v1793240878/%EC%A7%91%EC%97%90%EC%84%9C%EB%8F%84_%EC%9D%B4%EC%96%B4%EC%A7%80%EB%8A%94_%EB%94%B0%EB%9CBB%ED%95%9C_%EB%8F%8C%EB%B4%84-3_ekpdfx.png',
+    bannerImg: 'https://res.cloudinary.com/lyjyvy54/image/upload/f_auto,q_auto,w_1200/v1793240878/%EC%A7%91%EC%97%90%EC%84%9C%EB%8F%84_%EC%9D%B4%EC%96%B4%EC%A7%80%EB%8A%94_%EB%94%B0%EB%9C%BB%ED%95%9C_%EB%8F%8C%EB%B4%84-3_ekpdfx.png',
     bannerTitle: '03 스마트 홈케어 — 집에서도 이어지는 따뜻한 돌봄',
     bannerAlt: '03 스마트 홈케어 안내 배너 - 집에서도 이어지는 따뜻한 돌봄',
     bannerFallback: 'assets/smart-home-care.png',
@@ -48,7 +48,7 @@ const data = {
     ]
   },
   extra: {
-    bannerImg: 'https://res.cloudinary.com/lyjyvy54/image/upload/v1793240879/%EA%B0%80%EC%A1%B1%EA%B3%BC_%EA%B1%B4%EA%B0%95%EC%9D%84_%EB%8D%94%ED%95%98%EB%8A%94_%EB%A6%AC%EB%B3%B8%EC%BC%80%EC%96%B4_%ED%98%9C%ED%83%9D-4_bqtxpa.png',
+    bannerImg: 'https://res.cloudinary.com/lyjyvy54/image/upload/f_auto,q_auto,w_1200/v1793240879/%EA%B0%80%EC%A1%B1%EA%B3%BC_%EA%B1%B4%EA%B0%95%EC%9D%84_%EB%8D%94%ED%95%98%EB%8A%94_%EB%A6%AC%EB%B3%B8%EC%BC%80%EC%96%B4_%ED%98%9C%ED%83%9D-4_bqtxpa.png',
     bannerTitle: '04 추가 지원 케어 — 가족과 건강을 더하는 리본케어 혜택',
     bannerAlt: '04 추가 지원 케어 안내 배너 - 가족과 건강을 더하는 리본케어 혜택',
     bannerFallback: 'assets/membership-benefits.png',
@@ -63,6 +63,14 @@ const data = {
   }
 };
 
+// 탭 배너 이미지 백그라운드 사전 로딩 (탭 전환 시 깜빡임/지연 없이 즉시 표시)
+Object.values(data).forEach(tab => {
+  if (tab.bannerImg) {
+    const preload = new Image();
+    preload.src = tab.bannerImg;
+  }
+});
+
 // 2. 케어 탭 렌더링
 function renderTab(key) {
   let x = data[key];
@@ -70,7 +78,7 @@ function renderTab(key) {
   const isDeduct = key === 'treatment' || key === 'smart';
   $('#care-panel').innerHTML = `
     <div class="care-panel-banner" data-preview-img="${x.bannerImg}" data-preview-title="${x.bannerTitle}" title="클릭하면 큰 화면으로 볼 수 있습니다">
-      <img src="${x.bannerImg}" alt="${x.bannerAlt}" loading="lazy" onerror="this.onerror=null;this.src='${x.bannerFallback}';">
+      <img src="${x.bannerImg}" alt="${x.bannerAlt}" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='${x.bannerFallback}';">
     </div>
     <div class="care-panel-head">
       <p>${x.lead}</p>
@@ -79,7 +87,7 @@ function renderTab(key) {
         ${key === 'smart' ? '<span class="deduct-chip">5회 차감</span>' : ''}
       </div>
     </div>
-    <div class="service-grid">
+    <div class="service-grid cols-${x.items.length}" data-cols="${x.items.length}">
       ${x.items.map((a, i) => `
         <article class="service-card">
           <span class="icon-bubble ${i % 2 ? 'rose' : 'mint'}">
@@ -864,4 +872,170 @@ document.addEventListener('click', e => {
     }
   });
 });
+
+// ========================================================
+// Antigravity: 관리자 연동 및 방문자 트래킹 스크립트
+// ========================================================
+
+// 1. 접속 트래킹 전송
+function trackVisitor() {
+  try {
+    const referrer = document.referrer || 'direct';
+    fetch('/api/track', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        referrer: referrer,
+        path: window.location.pathname,
+        screenWidth: window.innerWidth
+      })
+    }).catch(() => {});
+  } catch (e) {}
+}
+
+// 2. 관리자에서 등록된 최신 실제 후기 동적 로드
+async function fetchAndRenderReviews() {
+  const grid = document.getElementById('reviews-grid');
+  if (!grid) return;
+
+  try {
+    const res = await fetch('/api/reviews');
+    if (!res.ok) return;
+    const data = await res.json();
+    if (!data.success || !Array.isArray(data.reviews) || data.reviews.length === 0) return;
+
+    // 카테고리별 카운트 집계
+    const counts = { all: data.reviews.length, care: 0, escort: 0, smart: 0, daily: 0 };
+    data.reviews.forEach(r => {
+      const cats = (r.category || '').split(' ');
+      cats.forEach(c => {
+        if (counts[c] !== undefined) counts[c]++;
+      });
+    });
+
+    // 탭 카운트 업데이트
+    document.querySelectorAll('.reviews-tab-nav .review-tab-btn').forEach(btn => {
+      const cat = btn.getAttribute('data-review-category');
+      const countEl = btn.querySelector('.tab-count');
+      if (countEl && counts[cat] !== undefined) {
+        countEl.textContent = counts[cat];
+      }
+    });
+
+    // 후기 HTML 동적 생성
+    const starsHtml = `<span class="review-stars"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></span>`;
+    
+    grid.innerHTML = data.reviews.map(r => {
+      const rating = (Number(r.rating) || 5.0).toFixed(1);
+      const tags = (r.tags || []).map(t => `<span class="review-tag">${t}</span>`).join('');
+      const verifiedHtml = r.verified ? `<span class="review-badge-verified"><svg><use href="#i-check"/></svg> 실이용 인증</span>` : '';
+      const avatarChar = r.avatarChar || (r.authorName ? r.authorName.charAt(0) : '리');
+      const avatarColor = r.avatarColor || 'rose';
+
+      return `
+        <article class="review-card" data-category="${r.category || 'care'}">
+          <div class="review-card-header">
+            <div class="review-badges">
+              ${r.planBadge ? `<span class="review-badge-plan">${r.planBadge}</span>` : ''}
+              ${r.usedBadge ? `<span class="review-badge-used">${r.usedBadge}</span>` : ''}
+              ${verifiedHtml}
+            </div>
+            <div class="review-rating" aria-label="5점 만점">
+              ${starsHtml}
+              <strong class="rating-num">${rating}</strong>
+            </div>
+          </div>
+          <div class="review-body">
+            <div class="review-quote-icon"><svg><use href="#i-quote"/></svg></div>
+            <h3 class="review-title">"${r.title}"</h3>
+            <p class="review-text">${r.content}</p>
+          </div>
+          <div class="review-tags">
+            ${tags}
+          </div>
+          <div class="review-author-wrap">
+            <div class="author-avatar ${avatarColor}">${avatarChar}</div>
+            <div class="author-info">
+              <div class="author-name">${r.authorName} <span class="author-role">${r.authorRole || ''}</span></div>
+              <div class="author-meta">${r.authorMeta || ''}</div>
+            </div>
+          </div>
+        </article>
+      `;
+    }).join('');
+  } catch (err) {
+    console.warn('[리본케어] 후기 동적 로드 폴백 유지:', err);
+  }
+}
+
+// 초기 실행
+document.addEventListener('DOMContentLoaded', () => {
+  trackVisitor();
+  fetchAndRenderReviews();
+  fetchAndApplySiteSettings();
+});
+
+// 3. 사이트 설정 (푸터 및 개인정보 동의) 동적 로드 및 반영
+async function fetchAndApplySiteSettings() {
+  try {
+    const res = await fetch('/api/settings');
+    if (!res.ok) return;
+    const data = await res.json();
+    if (!data.success || !data.settings) return;
+    const { footer, privacy } = data.settings;
+
+    // 푸터 슬로건
+    if (footer && footer.slogan) {
+      const sloganEl = document.querySelector('footer .footer-top > p');
+      if (sloganEl) sloganEl.textContent = footer.slogan;
+    }
+
+    // 푸터 비즈니스 정보
+    if (footer && footer.businessInfo) {
+      const bizEl = document.querySelector('footer .footer-bottom > p');
+      if (bizEl) bizEl.innerHTML = footer.businessInfo.replace(/\n/g, '<br>');
+    }
+
+    // 푸터 카피라이트
+    if (footer && footer.copyright) {
+      const copyEl = document.querySelector('footer .footer-bottom > span');
+      if (copyEl) copyEl.textContent = footer.copyright;
+    }
+
+    // 고객센터 전화번호 및 시간
+    if (footer && footer.customerPhone) {
+      document.querySelectorAll('.consult-modal-call strong').forEach(el => {
+        el.innerHTML = `<svg style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.8;display:inline-block;vertical-align:middle;margin-right:2px;"><use href="#i-phone"/></svg> ${footer.customerPhone}`;
+      });
+    }
+    if (footer && footer.customerHours) {
+      document.querySelectorAll('.consult-modal-call span').forEach(el => {
+        el.textContent = footer.customerHours;
+      });
+    }
+
+    // 개인정보 체크박스 안내 문구
+    if (privacy && privacy.consentCheckboxText) {
+      document.querySelectorAll('.consent > span').forEach(el => {
+        el.innerHTML = `${privacy.consentCheckboxText} <b>(필수)</b>`;
+      });
+    }
+
+    // 개인정보 전문 팝업 내용 동적 업데이트
+    if (privacy) {
+      const title = privacy.title || '개인정보 수집 및 이용 안내 (필수)';
+      const body = privacy.fullContent || [
+        privacy.items ? `1. 수집하는 개인정보 항목: ${privacy.items}` : '',
+        privacy.purpose ? `2. 수집 및 이용 목적: ${privacy.purpose}` : '',
+        privacy.period ? `3. 보유 및 이용 기간: ${privacy.period}` : '',
+        privacy.refusal ? `4. 동의 거부 권리: ${privacy.refusal}` : ''
+      ].filter(Boolean).join('\n');
+      const footerNotice = privacy.footerNotice || '접수된 개인정보는 상기 목적 외의 용도로 사용되지 않으며, 안전하게 보호 관리됩니다.';
+
+      details.privacy = [title, body, footerNotice];
+    }
+  } catch (err) {
+    console.warn('[리본케어] 설정 동적 로드 폴백 유지:', err);
+  }
+}
 

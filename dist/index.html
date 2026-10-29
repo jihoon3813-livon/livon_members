@@ -6,6 +6,7 @@
   <meta name="theme-color" content="#f7f9f6">
   <title>리본케어 | 간병부터 일상까지 라이프케어 멤버십</title>
   <meta name="description" content="간병, 병원 동행, 가사 지원, 스마트 홈케어. 필요한 돌봄을 가족에 맞춰 선택하는 리본케어 라이프케어 멤버십.">
+  <link rel="preconnect" href="https://res.cloudinary.com">
   <link rel="icon" href="https://res.cloudinary.com/lyjyvy54/image/upload/v1793176278/%EB%B6%84%ED%99%8D_LivOn%EA%B3%BC_%ED%8F%89%EB%A9%B4_%ED%9A%8C%EC%83%89_%EC%BC%80%EC%96%B4_%EB%A9%A4%EB%B2%84%EC%8B%AD_xssxzr.png" type="image/png">
   <link rel="stylesheet" href="style.css">
 </head>
@@ -196,7 +197,7 @@
           <div class="company-title-wrap">
             <span class="eyebrow">THE PEOPLE BEHIND YOUR CARE</span>
             <h2 id="company-title">
-              보험사의 간병 지원을 운영하는 경험,<br>
+              <span class="m-break">보험사의 간병 지원을</span> <span class="m-break">운영하는 경험,</span><br>
               <em>우리 가족의 돌봄으로.</em>
             </h2>
           </div>
@@ -361,20 +362,20 @@
         <div class="section-switch-pill" role="region" aria-label="섹션 네비게이션 안내">
           <a href="#company" class="switch-item is-past">
             <span class="switch-icon"><svg><use href="#i-check"/></svg></span>
-            <span class="switch-text">01. 리본케어 회사 소개</span>
+            <span class="switch-text"><span class="desktop-only">리본케어 </span>회사 소개</span>
           </a>
           <div class="switch-divider">
             <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
           </div>
           <div class="switch-item is-active">
             <span class="switch-dot"></span>
-            <span class="switch-text">02. 멤버십 상품 안내</span>
+            <span class="switch-text"><span class="desktop-only">멤버십 </span>상품 안내</span>
             <span class="switch-badge">현재 위치</span>
           </div>
         </div>
         <div class="section-switch-notice">
           <span class="notice-tag">PRODUCT GUIDE</span>
-          <p>지금부터는 가족을 위한 <strong>리본 라이프케어 멤버십 상품 구성 및 세부 혜택 안내</strong>입니다.</p>
+          <p>지금부터는 가족을 위한 <strong>리본 라이프케어 멤버십</strong><br class="mobile-only"> 상품 구성 및 세부 혜택 안내입니다.</p>
         </div>
       </div>
 
@@ -665,7 +666,7 @@
         <!-- 1. AI 가족 스토리 영상 제작 -->
         <article class="benefit-feature">
           <div class="video-art">
-            <img src="https://res.cloudinary.com/lyjyvy54/image/upload/v1793162157/%EC%84%B8%EB%8C%80%EA%B0%80_%ED%95%A8%EA%BB%98%ED%95%9C_%EB%94%B0%EB%9CBB%ED%95%9C_%ED%95%84%EB%A6%84_%EC%9D%B4%EC%95%BC%EA%B8%B0-3_axkymj.png" alt="AI 가족 스토리 영상 3분 제작" class="benefit-feature-img" onerror="this.onerror=null;this.src='assets/benefit-video.png';" />
+            <img src="https://res.cloudinary.com/lyjyvy54/image/upload/f_auto,q_auto,w_1200/v1793162157/%EC%84%B8%EB%8C%80%EA%B0%80_%ED%95%A8%EA%BB%98%ED%95%9C_%EB%94%B0%EB%9C%BB%ED%95%9C_%ED%95%84%EB%A6%84_%EC%9D%B4%EC%95%BC%EA%B8%B0-3_axkymj.png" alt="AI 가족 스토리 영상 3분 제작" class="benefit-feature-img" onerror="this.onerror=null;this.src='assets/benefit-video.png';" />
             <button class="play-button" data-detail="video" aria-label="가족 영상 제작 안내">▶</button>
             <span class="video-duration">OUR FAMILY STORY / 03:00</span>
           </div>
@@ -743,10 +744,12 @@
         </div>
       </div>
       <div class="choice-banner">
-        <span class="icon-bubble rose"><svg><use href="#i-spark"/></svg></span>
-        <div>
-          <h3>우리 가족에게 필요한 혜택, 하나 더.</h3>
-          <p>부모님 안심생활 리포트 · 옛 사진 복원 · 우리집 안전 체크 중 1종 선택</p>
+        <div class="choice-banner-main">
+          <span class="icon-bubble rose"><svg><use href="#i-spark"/></svg></span>
+          <div class="choice-banner-text">
+            <h3>우리 가족에게 필요한 혜택, 하나 더.</h3>
+            <p>부모님 안심생활 리포트 · 옛 사진 복원 · 우리집 안전 체크 중 1종 선택</p>
+          </div>
         </div>
         <button class="text-link" data-detail="choice">혜택 살펴보기 ↗</button>
       </div>
@@ -1261,8 +1264,8 @@
       <div class="review-bottom-cta">
         <div class="review-cta-text">
           <span class="badge badge-mint">신뢰와 안심의 약속</span>
-          <h3>우리 가족에게 가장 적합한 케어 구성을 찾아보세요</h3>
-          <p>전문 케어 플래너가 가족의 건강 상태와 라이프스타일에 맞추어 최적의 조합을 1:1로 안내해 드립니다.</p>
+          <h3><span class="m-break">우리 가족에게 가장 적합한</span> <span class="m-break">케어 구성을 찾아보세요</span></h3>
+          <p><span class="m-break">전문 케어 플래너가 가족의 건강 상태와 라이프스타일에 맞추어</span> <span class="m-break">최적의 조합을 1:1로 안내해 드립니다.</span></p>
         </div>
         <a href="#consult" class="btn primary">무료 맞춤 상담 신청하기 <svg><use href="#i-arrow"/></svg></a>
       </div>
@@ -1390,7 +1393,13 @@
         <img src="https://res.cloudinary.com/lyjyvy54/image/upload/v1793176278/%EB%B6%84%ED%99%8D_LivOn%EA%B3%BC_%ED%8F%89%EB%A9%B4_%ED%9A%8C%EC%83%89_%EC%BC%80%EC%96%B4_%EB%A9%A4%EB%B2%84%EC%8B%AD_xssxzr.png" alt="리본케어 LIFECARE MEMBERSHIP" class="brand-logo brand-logo-footer" onerror="this.onerror=null; this.src='assets/logo.png';">
       </a>
       <p>당신의 일상에, 돌봄이 함께.</p>
-      <a href="#">맨 위로 ↑</a>
+      <div class="footer-links-group" style="display:flex;align-items:center;gap:18px;margin-left:auto;">
+        <a href="admin.html" target="_blank" rel="noopener noreferrer" class="footer-admin-link" style="display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:var(--pink);background:#fbf3f5;border:1px solid #ebd3da;padding:6px 12px;border-radius:20px;transition:all .2s;" title="관리자 콘솔 새 창 열기">
+          <svg style="width:13px;height:13px;stroke:currentColor;fill:none;"><use href="#i-shield"/></svg>
+          <span>관리자 바로가기 ↗</span>
+        </a>
+        <a href="#" style="font-size:11px;color:#97a28b;">맨 위로 ↑</a>
+      </div>
     </div>
     <div class="footer-bottom">
       <p>리본케어 라이프케어 멤버십 · PC / MOBILE RESPONSIVE SITE<br>

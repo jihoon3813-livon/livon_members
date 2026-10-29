@@ -2958,11 +2958,25 @@ dialog.dialog-deduct .dialog-done:hover {
   }
   .section-switch-pill {
     width: 100%;
+    display: flex;
     justify-content: space-between;
+    align-items: center;
+    padding: 5px 6px;
   }
   .switch-item {
     font-size: 11px;
     padding: 6px 10px;
+    gap: 5px;
+    white-space: nowrap;
+  }
+  .switch-item .switch-text {
+    white-space: nowrap;
+  }
+  .switch-badge {
+    white-space: nowrap;
+    flex-shrink: 0;
+    font-size: 8.5px;
+    padding: 2px 6px;
   }
   .section-switch-notice {
     flex-direction: column;
@@ -2970,9 +2984,202 @@ dialog.dialog-deduct .dialog-done:hover {
     gap: 6px;
   }
   .section-switch-notice p {
-    font-size: 11.5px;
+    font-size: 12px;
+    line-height: 1.6;
+    word-break: keep-all;
+  }
+
+  /* 모바일 타이포그래피 및 인라인 블록 분기 */
+  .m-break {
+    display: inline-block;
+  }
+  .desktop-only {
+    display: none !important;
+  }
+  .mobile-only {
+    display: inline !important;
+  }
+
+  /* 01. 회사 소개 제목 줄바꿈 정돈 */
+  .company-heading h2 {
+    font-size: 24px;
+    line-height: 1.38;
+    letter-spacing: -0.04em;
+    word-break: keep-all;
+  }
+
+  /* 03. 혜택 섹션 안내 뱃지 그룹 정렬 */
+  .section-head {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    margin-bottom: 28px !important;
+    gap: 14px !important;
+  }
+  .section-head h2 {
+    font-size: 26px !important;
+    line-height: 1.4 !important;
+    word-break: keep-all !important;
+  }
+  .head-right-flex {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    flex-wrap: wrap !important;
+    margin-top: 0 !important;
+  }
+  .head-right-flex .outline-pill {
+    margin-top: 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    height: 34px !important;
+    padding: 0 12px !important;
+    font-size: 10.5px !important;
+  }
+  .head-right-flex .infographic-pill-btn {
+    margin-top: 0 !important;
+    height: 34px !important;
+    padding: 0 13px !important;
+    font-size: 11px !important;
+  }
+
+  /* 04. 추가 지원 혜택 선택 배너 (choice-banner) */
+  .choice-banner {
+    padding: 18px 16px !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+  }
+  .choice-banner-main {
+    display: flex !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+    width: 100% !important;
+  }
+  .choice-banner .icon-bubble {
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 12px !important;
+    flex-shrink: 0 !important;
+  }
+  .choice-banner-text h3 {
+    font-size: 15px !important;
+    line-height: 1.35 !important;
+    word-break: keep-all !important;
+    margin: 0 0 4px 0 !important;
+  }
+  .choice-banner-text p {
+    font-size: 11.5px !important;
+    line-height: 1.6 !important;
+    word-break: keep-all !important;
+  }
+  .choice-banner .text-link {
+    margin-left: 48px !important;
+    font-size: 12px !important;
+    padding: 0 !important;
+    color: var(--pink) !important;
+    font-weight: 700 !important;
+  }
+
+  /* 05. 후기 하단 상담 배너 */
+  .review-bottom-cta {
+    padding: 22px 18px !important;
+  }
+  .review-cta-text h3 {
+    font-size: 17.5px !important;
+    line-height: 1.4 !important;
+    word-break: keep-all !important;
+    margin: 8px 0 8px !important;
+  }
+  .review-cta-text p {
+    font-size: 12px !important;
+    line-height: 1.65 !important;
+    word-break: keep-all !important;
   }
 }
+
+/* 데스크톱/기본 반응형 헬퍼 */
+.keep-all {
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+.m-break {
+  display: inline;
+}
+.desktop-only {
+  display: inline;
+}
+.mobile-only {
+  display: none;
+}
+.company-heading h2 {
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+.switch-text {
+  white-space: nowrap;
+}
+.switch-badge {
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.choice-banner-main {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex: 1;
+}
+.choice-banner-text h3 {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0 0 4px 0;
+  word-break: keep-all;
+}
+.choice-banner-text p {
+  font-size: 13px;
+  color: #7b8879;
+  line-height: 1.6;
+  margin: 0;
+  word-break: keep-all;
+}
+.review-cta-text h3 {
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+.review-cta-text p {
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+/* 케어 섹션 서비스 그리드 카드 개수별(4개/5개) 너비 자동 균등 분할 */
+.service-grid[data-cols="4"],
+.service-grid.cols-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.service-grid[data-cols="5"],
+.service-grid.cols-5 {
+  grid-template-columns: repeat(5, 1fr);
+}
+
+@media (max-width: 1050px) {
+  .service-grid[data-cols="4"],
+  .service-grid.cols-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 760px) {
+  .service-grid[data-cols="4"],
+  .service-grid.cols-4,
+  .service-grid[data-cols="5"],
+  .service-grid.cols-5 {
+    grid-template-columns: 1fr 1fr;
+    gap: 11px;
+  }
+}
+
 
 
 
