@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 
-// 1. .env 및 .env.local 파싱
+// 1. .env 및 환경별 설정 파싱
 function loadEnvFile(envPath) {
   if (fs.existsSync(envPath)) {
     const lines = fs.readFileSync(envPath, 'utf-8').split('\n');
@@ -22,6 +22,17 @@ function loadEnvFile(envPath) {
     }
   }
 }
+
+// 환경 판별 (NODE_ENV=production 또는 APP_ENV=production 또는 --prod 플래그)
+const isProduction = process.env.NODE_ENV === 'production' || 
+                     process.env.APP_ENV === 'production' || 
+                     process.argv.includes('--prod') || 
+                     process.argv.includes('--production');
+if (isProduction) {
+  loadEnvFile(path.join(__dirname, '.env.production'));
+} else {
+  loadEnvFile(path.join(__dirname, '.env.development'));
+}
 loadEnvFile(path.join(__dirname, '.env.local'));
 loadEnvFile(path.join(__dirname, '.env'));
 
@@ -34,10 +45,15 @@ const REVIEWS_FILE = path.join(DATA_DIR, 'reviews.json');
 const ANALYTICS_FILE = path.join(DATA_DIR, 'analytics_logs.json');
 const SETTINGS_FILE = path.join(DATA_DIR, 'site_settings.json');
 
-// Convex Site URL 추론
+// Convex Site URL 설정 및 환경별 기본값 보장
 let CONVEX_SITE_URL = process.env.CONVEX_SITE_URL;
 if (!CONVEX_SITE_URL && process.env.CONVEX_URL) {
   CONVEX_SITE_URL = process.env.CONVEX_URL.replace('.convex.cloud', '.convex.site');
+}
+if (!CONVEX_SITE_URL) {
+  CONVEX_SITE_URL = isProduction
+    ? 'https://perceptive-pig-703.ap-southeast-2.convex.site'
+    : 'https://loyal-peccary-567.ap-southeast-2.convex.site';
 }
 
 // 데이터 파일 초기화 헬퍼
@@ -899,8 +915,9 @@ const server = http.createServer(async (req, res) => {
 
 function startServer(port) {
   server.listen(port, () => {
+    const envLabel = isProduction ? '운영 환경 (Production)' : '개발 환경 (Development)';
     console.log(`====================================================`);
-    console.log(`  리본케어 웹 서버 및 관리자 시스템이 시작되었습니다!`);
+    console.log(`  리본케어 웹 서버 및 관리자 시스템 [${envLabel}]`);
     console.log(`  메인 랜딩 사이트: http://localhost:${port}`);
     console.log(`  관리자 대시보드: http://localhost:${port}/admin`);
     if (CONVEX_SITE_URL) {

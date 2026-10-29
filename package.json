@@ -5,7 +5,10 @@
   "scripts": {
     "dev": "node server.js",
     "start": "node server.js",
-    "convex:dev": "npx convex dev"
+    "start:dev": "node server.js",
+    "start:prod": "node server.js --prod",
+    "convex:dev": "npx convex dev",
+    "convex:deploy": "npx convex deploy"
   },
   "repository": {
     "type": "git",
@@ -16,6 +19,9 @@
     "convex",
     "membership"
   ],
+  "dependencies": {
+    "convex": "^1.17.4"
+  },
   "author": "",
   "license": "ISC"
 }

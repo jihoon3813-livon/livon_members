@@ -11,10 +11,17 @@ module.exports = async function handler(req, res) {
     return res.status(204).end();
   }
 
-  // Convex URL 파싱
+  // Convex URL 파싱 및 환경별 자동 분리
+  const isProd = process.env.VERCEL_ENV === 'production' || process.env.NODE_ENV === 'production';
   let convexSiteUrl = process.env.CONVEX_SITE_URL;
   if (!convexSiteUrl && process.env.CONVEX_URL) {
     convexSiteUrl = process.env.CONVEX_URL.replace('.convex.cloud', '.convex.site');
+  }
+  // 환경변수가 없을 경우 운영/개발 기본 Convex 사이트 URL 자동 적용
+  if (!convexSiteUrl) {
+    convexSiteUrl = isProd
+      ? 'https://perceptive-pig-703.ap-southeast-2.convex.site'
+      : 'https://loyal-peccary-567.ap-southeast-2.convex.site';
   }
 
   // 1. POST /api/consult (상담 신청)

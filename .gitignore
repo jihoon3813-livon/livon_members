@@ -2,10 +2,11 @@
 node_modules/
 package-lock.json
 
-# Convex
+# Convex & Environment
 .convex/
 .env
 .env.local
+.env.*.local
 
 # Logs and runtime
 *.log
