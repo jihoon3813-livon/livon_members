@@ -4,9 +4,9 @@ const $$ = s => [...document.querySelectorAll(s)];
 // 1. 케어 탭 데이터
 const data = {
   daily: {
-    bannerImg: 'https://res.cloudinary.com/lyjyvy54/image/upload/v1793162155/%EA%B1%B4%EA%B0%95%ED%95%9C_%EC%9D%BC%EC%83%81%EC%9D%84_%EC%9C%84%ED%95%9C_%EB%A6%AC%EB%B3%B8%EC%BC%80%EC%96%B4-2_k6velv.png',
-    bannerTitle: '01 평상시 케어 — 건강한 일상을 위한 리본케어',
-    bannerAlt: '01 평상시 케어 안내 배너 - 건강한 일상을 위한 리본케어',
+    bannerImg: 'https://res.cloudinary.com/lyjyvy54/image/upload/v1793240879/%EA%B1%B4%EA%B0%95%ED%95%9C_%EC%9D%BC%EC%83%81%EC%9D%84_%EB%8F%95%EB%8A%94_%EB%A6%AC%EB%B3%B8%EC%BC%80%EC%96%B4-1_ktbsqo.png',
+    bannerTitle: '01 평상시 케어 — 건강한 일상을 돕는 리본케어',
+    bannerAlt: '01 평상시 케어 안내 배너 - 건강한 일상을 돕는 리본케어',
     bannerFallback: 'assets/daily-care.png',
     lead: '건강할 때부터, 일상 속 건강관리를 함께 준비합니다.',
     tag: '기본 포함',
@@ -19,9 +19,9 @@ const data = {
     ]
   },
   treatment: {
-    bannerImg: 'https://res.cloudinary.com/lyjyvy54/image/upload/v1793162156/%EC%B9%98%EB%A3%8C%EB%B6%80%ED%84%B0_%ED%9A%8C%EB%B3%B5%EA%B9%8C%EC%A7%80_%ED%95%A8%EA%BB%98%ED%95%98%EB%8A%94_%EB%A6%AC%EB%B3%B8%EC%BC%80%EC%96%B4-1_lubz9k.png',
-    bannerTitle: '02 치료지원 케어 — 치료부터 회복까지 함께하는 리본케어',
-    bannerAlt: '02 치료지원 케어 안내 배너 - 치료부터 회복까지 함께하는 리본케어',
+    bannerImg: 'https://res.cloudinary.com/lyjyvy54/image/upload/v1793240879/%EC%B9%98%EB%A3%8C%EB%B6%80%ED%84%B0_%ED%9A%8C%EB%B3%B5%EA%B9%8C%EC%A7%80_%ED%95%A8%EA%BB%98%ED%95%98%EB%8A%94_%EC%BC%80%EC%96%B4-2_yqqzoo.png',
+    bannerTitle: '02 치료지원 케어 — 치료부터 회복까지 함께하는 케어',
+    bannerAlt: '02 치료지원 케어 안내 배너 - 치료부터 회복까지 함께하는 케어',
     bannerFallback: 'assets/treatment-care.png',
     lead: '치료와 회복에 필요한 실질적인 도움을 선택하세요.',
     tag: '통합 한도에서 차감',
@@ -34,9 +34,9 @@ const data = {
     ]
   },
   smart: {
-    bannerImg: 'https://res.cloudinary.com/lyjyvy54/image/upload/v1793162154/%EC%A7%91%EC%97%90%EC%84%9C_%EC%9D%B4%EC%96%B4%EC%A7%80%EB%8A%94_%EB%94%B0%EB%9CBB%ED%95%9C_%EB%8F%8C%EB%B4%84_e17pwf.png',
-    bannerTitle: '03 스마트 홈케어 — 집에서 이어지는 따뜻한 돌봄',
-    bannerAlt: '03 스마트 홈케어 안내 배너 - 집에서 이어지는 따뜻한 돌봄',
+    bannerImg: 'https://res.cloudinary.com/lyjyvy54/image/upload/v1793240878/%EC%A7%91%EC%97%90%EC%84%9C%EB%8F%84_%EC%9D%B4%EC%96%B4%EC%A7%80%EB%8A%94_%EB%94%B0%EB%9CBB%ED%95%9C_%EB%8F%8C%EB%B4%84-3_ekpdfx.png',
+    bannerTitle: '03 스마트 홈케어 — 집에서도 이어지는 따뜻한 돌봄',
+    bannerAlt: '03 스마트 홈케어 안내 배너 - 집에서도 이어지는 따뜻한 돌봄',
     bannerFallback: 'assets/smart-home-care.png',
     lead: '병원 밖, 집에서도 이어지는 돌봄을 5년간 무상으로 연결합니다.',
     tag: '통합 한도에서 차감',
@@ -48,9 +48,9 @@ const data = {
     ]
   },
   extra: {
-    bannerImg: 'https://res.cloudinary.com/lyjyvy54/image/upload/v1793162154/%EA%B1%B4%EA%B0%95%EA%B3%BC_%EA%B0%80%EC%A1%B1%EC%9D%84_%EC%9C%84%ED%95%9C_%EB%84%A4_%EA%B0%80%EC%A7%80_%ED%98%9C%ED%83%9D_bzrbru.png',
-    bannerTitle: '04 추가 지원 케어 — 건강과 가족을 위한 네 가지 혜택',
-    bannerAlt: '04 추가 지원 케어 안내 배너 - 건강과 가족을 위한 네 가지 혜택',
+    bannerImg: 'https://res.cloudinary.com/lyjyvy54/image/upload/v1793240879/%EA%B0%80%EC%A1%B1%EA%B3%BC_%EA%B1%B4%EA%B0%95%EC%9D%84_%EB%8D%94%ED%95%98%EB%8A%94_%EB%A6%AC%EB%B3%B8%EC%BC%80%EC%96%B4_%ED%98%9C%ED%83%9D-4_bqtxpa.png',
+    bannerTitle: '04 추가 지원 케어 — 가족과 건강을 더하는 리본케어 혜택',
+    bannerAlt: '04 추가 지원 케어 안내 배너 - 가족과 건강을 더하는 리본케어 혜택',
     bannerFallback: 'assets/membership-benefits.png',
     lead: '건강과 가족의 일상에 더하는 멤버십 혜택입니다.',
     tag: '횟수 차감 없음',
@@ -71,7 +71,6 @@ function renderTab(key) {
   $('#care-panel').innerHTML = `
     <div class="care-panel-banner" data-preview-img="${x.bannerImg}" data-preview-title="${x.bannerTitle}" title="클릭하면 큰 화면으로 볼 수 있습니다">
       <img src="${x.bannerImg}" alt="${x.bannerAlt}" loading="lazy" onerror="this.onerror=null;this.src='${x.bannerFallback}';">
-      <span class="banner-zoom-hint"><svg><use href="#i-zoom"/></svg> 배너 크게 보기</span>
     </div>
     <div class="care-panel-head">
       <p>${x.lead}</p>
@@ -145,6 +144,7 @@ const details = {
   smart: [
     '리본 스마트 안심홈 이용 안내',
     '케어비전 태블릿과 홈 센서, 가족을 위한 안심 보호자 연결 기능을 결합하는 패키지입니다. 통합 한도에서 5회를 차감하여 5년간 무상으로 기본 제공되며, 5년 이후에는 월 이용료가 발생할 수 있습니다.',
+    '🚨 [실제 골든타임 구조 사례] 단순한 스마트 기기가 아닌 어르신의 생명을 살린 검증된 안심 서비스입니다. 화재나 위급 상황 시 119에 자동으로 즉시 신고되어 골든타임 내에 소방대가 출동하여 생명을 구한 실제 구조 사례(KBS 단독 보도)가 입증하듯 24시간 든든한 일상을 지켜드립니다.',
     '장비 구성·대여 및 반환 기준·설치 조건은 최종 확정 시 안내됩니다. 화면의 장비와 기능 표현은 실제 거실 연출 및 이해를 돕는 일러스트입니다.'
   ],
   daily: [
@@ -783,36 +783,8 @@ document.addEventListener('click', e => {
   }
 });
 
-// 스마트 안심홈 하이브리드 결합형 (플로팅 미니 포토 카드 ↔ 실사 뷰 전환)
-const viewIllust = $('#viewIllust');
-const viewPhoto = $('#viewPhoto');
-const floatingCard = $('#floatingPhotoCard');
-const switchBackBtn = $('#switchBackBtn');
-
-function switchSmartView(mode) {
-  if (!viewIllust || !viewPhoto) return;
-  if (mode === 'photo') {
-    viewIllust.classList.remove('active');
-    viewPhoto.classList.add('active');
-  } else {
-    viewPhoto.classList.remove('active');
-    viewIllust.classList.add('active');
-  }
-}
-
-if (floatingCard) {
-  floatingCard.addEventListener('click', e => {
-    e.stopPropagation();
-    switchSmartView('photo');
-  });
-}
-
-if (switchBackBtn) {
-  switchBackBtn.addEventListener('click', e => {
-    e.stopPropagation();
-    switchSmartView('illust');
-  });
-}
+// 스마트 안심홈 (세로 롱 통합 쇼케이스 - data-preview-img 라이트박스 연동 지원)
+// 상단 일러스트 및 하단 실사 사진이 일체형으로 노출되며, 하단 사진 클릭 시 라이트박스가 동작합니다.
 
 // 혜택 상세 토글 아코디언 인터랙션
 document.addEventListener('click', e => {
@@ -832,7 +804,36 @@ document.addEventListener('click', e => {
     toggleBtn.setAttribute('aria-expanded', 'true');
     toggleBtn.querySelector('span').textContent = '상세 혜택 접기';
   }
+  // 토글 시 비주얼 영역 높이 재동기화
+  setTimeout(syncBenefitVisualHeight, 50);
 });
+
+// 멤버십 혜택 01 상단 이미지 영역(video-art) 높이를 우측 상단 배너(nutrition) 높이와 정확히 일치 동기화
+function syncBenefitVisualHeight() {
+  const videoArt = document.querySelector('.benefit-feature .video-art');
+  const nutCard = document.querySelector('.benefit-side article.nutrition');
+  if (!videoArt || !nutCard) return;
+
+  if (window.innerWidth > 760) {
+    const nutH = nutCard.offsetHeight;
+    if (nutH > 0) {
+      videoArt.style.height = `${nutH}px`;
+    }
+  } else {
+    videoArt.style.height = '';
+  }
+}
+
+window.addEventListener('load', syncBenefitVisualHeight);
+window.addEventListener('resize', syncBenefitVisualHeight);
+document.addEventListener('DOMContentLoaded', syncBenefitVisualHeight);
+
+if (window.ResizeObserver) {
+  const nutCard = document.querySelector('.benefit-side article.nutrition');
+  if (nutCard) {
+    new ResizeObserver(() => syncBenefitVisualHeight()).observe(nutCard);
+  }
+}
 
 // 실제 후기 카테고리 필터 탭 인터랙션
 document.addEventListener('click', e => {
