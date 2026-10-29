@@ -402,6 +402,85 @@ $$('.mobile-nav a').forEach(a => {
   };
 });
 
+// ==========================================
+// 운영 / 개발 Convex 엔드포인트 분리 설정
+// ==========================================
+const CONVEX_PROD_SITE_URL = 'https://perceptive-pig-703.ap-southeast-2.convex.site';
+const CONVEX_DEV_SITE_URL = 'https://loyal-peccary-567.ap-southeast-2.convex.site';
+
+// 현재 환경 판별 (로컬/개발 vs 운영)
+function isLocalOrDevEnvironment() {
+  const host = window.location.hostname;
+  return host === 'localhost' || host === '127.0.0.1' || host.startsWith('192.168.') || host.includes('dev.');
+}
+
+// 환경에 따른 Convex 직접 전송 URL
+function getTargetConvexUrl() {
+  return isLocalOrDevEnvironment() ? CONVEX_DEV_SITE_URL : CONVEX_PROD_SITE_URL;
+}
+
+// 상담 신청 공통 전송 함수 (운영/개발 데이터 완벽 분리 + 정적 호스팅 지원)
+async function sendConsultationData(payload) {
+  const isLocal = isLocalOrDevEnvironment();
+  const directConvexUrl = `${getTargetConvexUrl()}/api/consult`;
+
+  // 1. 로컬 개발 환경인 경우: 자체 서버 우선
+  if (isLocal) {
+    try {
+      const res = await fetch('/api/consult', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (res.ok) {
+        return await res.json();
+      }
+    } catch (e) {
+      console.warn('[로컬 서버 미응답, 개발 Convex 직접 전송]:', e);
+    }
+    // 로컬 서버 미응답 시 개발 Convex로 직접 전송
+    const devRes = await fetch(directConvexUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    return await devRes.json();
+  }
+
+  // 2. 운영 환경 (GitHub Pages / 실서비스 도메인 등)
+  // GitHub Pages 정적 호스팅에서는 즉시 운영 Convex로 직접 전송
+  if (window.location.hostname.includes('github.io')) {
+    const directRes = await fetch(directConvexUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    return await directRes.json();
+  }
+
+  // Vercel 등 백엔드 API가 있는 경우
+  try {
+    const res = await fetch('/api/consult', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    if (res.ok) {
+      return await res.json();
+    }
+  } catch (e) {
+    console.warn('[상대경로 실패, 운영 Convex 직접 전송]:', e);
+  }
+
+  // 폴백: 운영 Convex 직접 전송
+  const prodRes = await fetch(directConvexUrl, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  });
+  return await prodRes.json();
+}
+
 // 7. 상담 신청 폼: 자동 포맷팅, 유효성 검사 및 서버 전송 (fallback localStorage)
 const inputName = $('#input-name');
 const inputPhone = $('#input-phone');
@@ -505,24 +584,17 @@ consultForm.onsubmit = async e => {
   submitBtn.textContent = '접수 중...';
 
   try {
-    const res = await fetch('/api/consult', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
+    const result = await sendConsultationData(payload);
 
-    const result = await res.json();
-
-    if (result.success) {
+    if (result && result.success) {
       openDialog('상담 신청 접수 완료', [
-        `[접수번호: ${result.consultationId}]`,
         `${payload.name} 고객님의 상담 신청이 정상적으로 등록되었습니다.`,
         '전문 상담사가 접수된 내용을 확인한 후, 남겨주신 연락처(' + payload.phone + ')로 순차적으로 연락드리겠습니다. 감사합니다.'
       ]);
       consultForm.reset();
       $('#selected-combo').hidden = true;
     } else {
-      throw new Error(result.message || '접수 실패');
+      throw new Error((result && result.message) || '접수 실패');
     }
   } catch (err) {
     // API 서버가 동작하지 않는 정적 호스팅 환경일 경우 localStorage에 안전하게 보관 (Fallback)
@@ -533,7 +605,6 @@ consultForm.onsubmit = async e => {
       localStorage.setItem('livon_consultations', JSON.stringify(stored));
 
       openDialog('상담 신청 완료', [
-        `[접수번호: ${offlineId}]`,
         `${payload.name} 고객님의 상담 신청이 안전하게 접수되었습니다.`,
         '확인 후 빠른 시일 내에 기재해주신 번호(' + payload.phone + ')로 안내 연락드리겠습니다.'
       ]);
@@ -725,25 +796,18 @@ if (modalConsultForm) {
     modalSubmitBtn.textContent = '접수 중...';
 
     try {
-      const res = await fetch('/api/consult', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
+      const result = await sendConsultationData(payload);
 
-      const result = await res.json();
-
-      if (result.success) {
+      if (result && result.success) {
         closeConsultModal();
         openDialog('상담 신청 접수 완료', [
-          `[접수번호: ${result.consultationId}]`,
           `${payload.name} 고객님의 상담 신청이 정상적으로 등록되었습니다.`,
           '전문 상담사가 접수된 내용을 확인한 후, 남겨주신 연락처(' + payload.phone + ')로 순차적으로 연락드리겠습니다. 감사합니다.'
         ]);
         modalConsultForm.reset();
         if (modalSelectedCombo) modalSelectedCombo.hidden = true;
       } else {
-        throw new Error(result.message || '접수 실패');
+        throw new Error((result && result.message) || '접수 실패');
       }
     } catch (err) {
       try {
@@ -754,7 +818,6 @@ if (modalConsultForm) {
 
         closeConsultModal();
         openDialog('상담 신청 완료', [
-          `[접수번호: ${offlineId}]`,
           `${payload.name} 고객님의 상담 신청이 안전하게 접수되었습니다.`,
           '확인 후 빠른 시일 내에 기재해주신 번호(' + payload.phone + ')로 안내 연락드리겠습니다.'
         ]);

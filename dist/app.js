@@ -588,7 +588,6 @@ consultForm.onsubmit = async e => {
 
     if (result && result.success) {
       openDialog('상담 신청 접수 완료', [
-        `[접수번호: ${result.consultationId}]`,
         `${payload.name} 고객님의 상담 신청이 정상적으로 등록되었습니다.`,
         '전문 상담사가 접수된 내용을 확인한 후, 남겨주신 연락처(' + payload.phone + ')로 순차적으로 연락드리겠습니다. 감사합니다.'
       ]);
@@ -606,7 +605,6 @@ consultForm.onsubmit = async e => {
       localStorage.setItem('livon_consultations', JSON.stringify(stored));
 
       openDialog('상담 신청 완료', [
-        `[접수번호: ${offlineId}]`,
         `${payload.name} 고객님의 상담 신청이 안전하게 접수되었습니다.`,
         '확인 후 빠른 시일 내에 기재해주신 번호(' + payload.phone + ')로 안내 연락드리겠습니다.'
       ]);
@@ -803,7 +801,6 @@ if (modalConsultForm) {
       if (result && result.success) {
         closeConsultModal();
         openDialog('상담 신청 접수 완료', [
-          `[접수번호: ${result.consultationId}]`,
           `${payload.name} 고객님의 상담 신청이 정상적으로 등록되었습니다.`,
           '전문 상담사가 접수된 내용을 확인한 후, 남겨주신 연락처(' + payload.phone + ')로 순차적으로 연락드리겠습니다. 감사합니다.'
         ]);
@@ -821,7 +818,6 @@ if (modalConsultForm) {
 
         closeConsultModal();
         openDialog('상담 신청 완료', [
-          `[접수번호: ${offlineId}]`,
           `${payload.name} 고객님의 상담 신청이 안전하게 접수되었습니다.`,
           '확인 후 빠른 시일 내에 기재해주신 번호(' + payload.phone + ')로 안내 연락드리겠습니다.'
         ]);
