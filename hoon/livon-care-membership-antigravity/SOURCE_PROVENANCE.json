@@ -1,0 +1,13 @@
+{
+  "site_url": "https://livon-care-membership.hoony365.chatgpt.site",
+  "site_version": 2,
+  "source_commit": "66678d17c2579bb62caff93c18f838175907b614",
+  "export_date_kst": "2026-11-09",
+  "export_format": "React + TypeScript + Vite",
+  "changes_for_portability": [
+    "Copied the deployed client page to src/App.tsx without changing page content",
+    "Copied original CSS, local images and favicon",
+    "Replaced hosting-specific server setup with a standard Vite entrypoint",
+    "Included full Noto Sans KR font coverage for future Korean copy edits"
+  ]
+}

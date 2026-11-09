@@ -7,6 +7,7 @@
     "start": "node server.js",
     "start:dev": "node server.js",
     "start:prod": "node server.js --prod",
+    "build:site2": "powershell -ExecutionPolicy Bypass -File ./scripts/build-site2.ps1",
     "convex:dev": "npx convex dev",
     "convex:deploy": "npx convex deploy"
   },

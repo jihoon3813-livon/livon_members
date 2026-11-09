@@ -255,7 +255,9 @@ const MIME_TYPES = {
   '.svg': 'image/svg+xml',
   '.ico': 'image/x-icon',
   '.woff2': 'font/woff2',
-  '.woff': 'font/woff'
+  '.woff': 'font/woff',
+  '.webp': 'image/webp',
+  '.txt': 'text/plain; charset=utf-8'
 };
 
 // Request Body 파싱 유틸
@@ -879,12 +881,24 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
+  // /2 또는 /membership2 -> /2/ 로 리다이렉트
+  if (pathname === '/2' || pathname === '/membership2') {
+    res.writeHead(301, { 'Location': '/2/' });
+    res.end();
+    return;
+  }
+
   // 일반 웹 접속 시 자동 트래킹 (정적 리소스 제외하고 메인 웹 페이지 방문 시)
   if (pathname === '/' || pathname === '/index.html') {
     const clientIp = getClientIp(req);
     const referer = req.headers['referer'] || 'direct';
     const ua = req.headers['user-agent'] || '';
     logVisit(clientIp, referer, ua, '/');
+  } else if (pathname === '/2/' || pathname === '/2/index.html') {
+    const clientIp = getClientIp(req);
+    const referer = req.headers['referer'] || 'direct';
+    const ua = req.headers['user-agent'] || '';
+    logVisit(clientIp, referer, ua, '/2/');
   }
 
   // 정적 파일 서빙
@@ -896,7 +910,11 @@ const server = http.createServer(async (req, res) => {
   }
 
   if (!fs.existsSync(filePath)) {
-    filePath = path.join(DIST_DIR, 'index.html');
+    if (pathname.startsWith('/2/') || pathname.startsWith('/2')) {
+      filePath = path.join(DIST_DIR, '2', 'index.html');
+    } else {
+      filePath = path.join(DIST_DIR, 'index.html');
+    }
   }
 
   const ext = path.extname(filePath).toLowerCase();
@@ -904,6 +922,7 @@ const server = http.createServer(async (req, res) => {
 
   fs.readFile(filePath, (err, content) => {
     if (err) {
+      console.error(`[Static File Error] Failed to read ${filePath}:`, err.message);
       res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
       res.end('404 Not Found');
       return;
@@ -919,6 +938,7 @@ function startServer(port) {
     console.log(`====================================================`);
     console.log(`  리본케어 웹 서버 및 관리자 시스템 [${envLabel}]`);
     console.log(`  메인 랜딩 사이트: http://localhost:${port}`);
+    console.log(`  신규 멤버십 사이트 (v2): http://localhost:${port}/2`);
     console.log(`  관리자 대시보드: http://localhost:${port}/admin`);
     if (CONVEX_SITE_URL) {
       console.log(`  연결된 Convex 백엔드: ${CONVEX_SITE_URL}`);

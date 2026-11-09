@@ -47,6 +47,16 @@ git push -u origin main
 
 ---
 
+## 🌐 사이트 주소 안내
+
+* **메인 랜딩 사이트 (v1)**: `http://localhost:8080/`
+* **신규 멤버십 사이트 (v2)**: `http://localhost:8080/2` (또는 `/membership2`)
+* **관리자 대시보드**: `http://localhost:8080/admin`
+
+> **참고**: 신규 멤버십 사이트(v2) 소스는 `hoon/livon-care-membership-antigravity`에 위치하며, 소스 수정 후 `npm run build:site2` 명령어로 `dist/2`에 바로 반영할 수 있습니다.
+
+---
+
 ## 📁 디렉토리 구조
 
 ```text
