@@ -899,6 +899,11 @@ const server = http.createServer(async (req, res) => {
     const referer = req.headers['referer'] || 'direct';
     const ua = req.headers['user-agent'] || '';
     logVisit(clientIp, referer, ua, '/2/');
+  } else if (pathname === '/plus' || pathname === '/plus/' || pathname === '/plus/index.html') {
+    const clientIp = getClientIp(req);
+    const referer = req.headers['referer'] || 'direct';
+    const ua = req.headers['user-agent'] || '';
+    logVisit(clientIp, referer, ua, '/plus');
   }
 
   // 정적 파일 서빙
@@ -912,6 +917,8 @@ const server = http.createServer(async (req, res) => {
   if (!fs.existsSync(filePath)) {
     if (pathname.startsWith('/2/') || pathname.startsWith('/2')) {
       filePath = path.join(DIST_DIR, '2', 'index.html');
+    } else if (pathname === '/plus' || pathname.startsWith('/plus/')) {
+      filePath = path.join(DIST_DIR, 'plus', 'index.html');
     } else {
       filePath = path.join(DIST_DIR, 'index.html');
     }
@@ -939,6 +946,7 @@ function startServer(port) {
     console.log(`  리본케어 웹 서버 및 관리자 시스템 [${envLabel}]`);
     console.log(`  메인 랜딩 사이트: http://localhost:${port}`);
     console.log(`  신규 멤버십 사이트 (v2): http://localhost:${port}/2`);
+    console.log(`  간병플러스 랜딩 사이트: http://localhost:${port}/plus`);
     console.log(`  관리자 대시보드: http://localhost:${port}/admin`);
     if (CONVEX_SITE_URL) {
       console.log(`  연결된 Convex 백엔드: ${CONVEX_SITE_URL}`);
